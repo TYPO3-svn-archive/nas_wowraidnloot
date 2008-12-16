@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>database</type>
+		<description>Language labels for database tables/fields belonging to extension 'nas_wowraidnloot'</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="tx_naswowraidnloot_server">Server</label>
+			<label index="tx_naswowraidnloot_server.title">title</label>
+			<label index="tx_naswowraidnloot_server.continent">arsenal type</label>
+			<label index="tx_naswowraidnloot_server.continent.I">Europe</label>
+			<label index="tx_naswowraidnloot_server.continent.II">US</label>
+			<label index="tx_naswowraidnloot_guild">Guild</label>
+			<label index="tx_naswowraidnloot_guild.title">title</label>
+			<label index="tx_naswowraidnloot_guild.description">desctiption</label>
+			<label index="tx_naswowraidnloot_chars">Character</label>
+			<label index="tx_naswowraidnloot_chars.name">name</label>
+			<label index="tx_naswowraidnloot_chars.server">server</label>
+			<label index="tx_naswowraidnloot_chars.guild">guild</label>
+			<label index="tx_naswowraidnloot_chars.comments">comments</label>
+			<label index="tx_naswowraidnloot_chars.armoryid">armory id</label>
+			<label index="tx_naswowraidnloot_chars.points">points gathered</label>
+			<label index="tx_naswowraidnloot_chars.player">player</label>
+			<label index="tx_naswowraidnloot_collected">Collected</label>
+			<label index="tx_naswowraidnloot_collected.itemid">item id</label>
+			<label index="tx_naswowraidnloot_collected.itemname">item name</label>
+			<label index="tx_naswowraidnloot_collected.lootdate">loot date</label>
+			<label index="tx_naswowraidnloot_collected.charid">char id</label>
+			<label index="tx_naswowraidnloot_raid">Raid</label>
+			<label index="tx_naswowraidnloot_raid.title">title</label>
+			<label index="tx_naswowraidnloot_raid.destinationid">destination id</label>
+			<label index="tx_naswowraidnloot_raid.start">start</label>
+			<label index="tx_naswowraidnloot_raid.end">end</label>
+			<label index="tx_naswowraidnloot_raid.member">member</label>
+			<label index="tx_naswowraidnloot_raid.points">points</label>
+			<label index="tx_naswowraidnloot_raid.pointspboss">points per boss</label>
+			<label index="tt_content.list_type_pi1">Manage Characters</label>
+			<label index="tt_content.list_type_pi2">Manage Raids</label>
+			<label index="tt_content.list_type_pi3">Reports</label>
+			<label index="tt_content.list_type_pi4">User Profile</label>
+			<label index="tt_content.list_type_pi5">Administration</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="tx_naswowraidnloot_server">Server</label>
+			<label index="tx_naswowraidnloot_server.title">Titel</label>
+			<label index="tx_naswowraidnloot_server.continent">Arsenal Typ</label>
+			<label index="tx_naswowraidnloot_server.continent.I">Europa</label>
+			<label index="tx_naswowraidnloot_server.continent.II">US</label>
+			<label index="tx_naswowraidnloot_guild">Gilde</label>
+			<label index="tx_naswowraidnloot_guild.title">Titel</label>
+			<label index="tx_naswowraidnloot_guild.description">Beschreibung</label>
+			<label index="tx_naswowraidnloot_chars">Charaktere</label>
+			<label index="tx_naswowraidnloot_chars.name">Name</label>
+			<label index="tx_naswowraidnloot_chars.server">Server</label>
+			<label index="tx_naswowraidnloot_chars.guild">Gilde</label>
+			<label index="tx_naswowraidnloot_chars.comments">Kommentare</label>
+			<label index="tx_naswowraidnloot_chars.armoryid">Armory ID</label>
+			<label index="tx_naswowraidnloot_chars.points">gesammelte Punkte</label>
+			<label index="tx_naswowraidnloot_chars.player">Spieler</label>
+			<label index="tx_naswowraidnloot_collected">Gesammelt</label>
+			<label index="tx_naswowraidnloot_collected.itemid">Gegenstand ID</label>
+			<label index="tx_naswowraidnloot_collected.itemname">Gegenstand Name</label>
+			<label index="tx_naswowraidnloot_collected.lootdate">Loot Datum</label>
+			<label index="tx_naswowraidnloot_collected.charid">Char ID</label>
+			<label index="tx_naswowraidnloot_raid">raid</label>
+			<label index="tx_naswowraidnloot_raid.title">Titel</label>
+			<label index="tx_naswowraidnloot_raid.destinationid">Zielort ID</label>
+			<label index="tx_naswowraidnloot_raid.start">Startzeit</label>
+			<label index="tx_naswowraidnloot_raid.end">Endzeit</label>
+			<label index="tx_naswowraidnloot_raid.member">Teilnehmer</label>
+			<label index="tx_naswowraidnloot_raid.points">Punkte</label>
+			<label index="tx_naswowraidnloot_raid.pointspboss">Punkte pro Boss</label>
+			<label index="tt_content.list_type_pi1">Charaktere Verwalten</label>
+			<label index="tt_content.list_type_pi2">Raids Verwalten</label>
+			<label index="tt_content.list_type_pi3">Auswertungen</label>
+			<label index="tt_content.list_type_pi4">Nutzer Profil</label>
+			<label index="tt_content.list_type_pi5">Administration</label>
+		</languageKey>
+	</data>
+</T3locallang>
