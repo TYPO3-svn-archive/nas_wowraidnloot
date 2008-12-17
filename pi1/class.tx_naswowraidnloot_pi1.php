@@ -50,7 +50,10 @@ class tx_naswowraidnloot_pi1 extends tslib_pibase {
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
 		
-		$content= $this->getCharacter(1);
+		$template_file = t3lib_extMgm::siteRelPath('nas_wowraidnloot')."/res/main.html"; 
+		$this->tmpl = $this->cObj->fileResource($template_file);
+		
+		$content .= $this->getCharacter(1);
 			
 		return $this->pi_wrapInBaseClass($content);
 	}
@@ -95,11 +98,36 @@ class tx_naswowraidnloot_pi1 extends tslib_pibase {
  		//$content = $xml->characterInfo->character['name']." hat das Level ".$xml->characterInfo->character['level'];
 		foreach($xml->characterInfo->character->attributes() as $a => $b) {
 			$markerArray['###'.strtoupper($a).'###'] = (string)$b;
-    		$content .= $a.'="'.$b."\"<br>";
+    		//$content .= $a.'="'.$b."\"<br>";
 		}
 		t3lib_div::devLog('markerArray', $this->extKey, 0, $markerArray);
-		
+		$img_add = 'default';
+		$char_level = $xml->characterInfo->character['level'];
+		if ($char_level >= 70){
+			$img_add = '70';
+		}
+		if ($char_level == 80) {
+			$img_add = '80';
+		}
+		$markerArray['###IMG###'] = $img_add.'/'.$xml->characterInfo->character['genderId'].'-'.$xml->characterInfo->character['raceId'].'-'.$xml->characterInfo->character['classId'];
+		$content .= $this->renderContent('###CHAR_SHEET###',$markerArray);
+	
 		return $content;
+	}
+	
+	function renderContent($subpart, $markerArray) {
+	  	$wrappedSubpartArray = array();
+	  	if ($this->errorText == '') {
+	  		$markerArray['###ERROR###'] = '';
+	  	} else {
+	  		$markerArray['###ERRORCLASS###'] = 'error';
+			$markerArray['###ERROR###'] = $this->errorText;
+	  	}
+
+	    $subpart = $this->cObj->getSubpart($this->tmpl,$subpart);
+	    $content = $this->cObj->substituteMarkerArrayCached($subpart, $markerArray, array(), $wrappedSubpartArray);
+
+	    return $content;
 	}
 }
 
