@@ -17,8 +17,8 @@
 								<type>select</type>
 								<items type="array">
 									<numIndex index="0" type="array">
-										<numIndex index="0">MENU</numIndex>
-										<numIndex index="1">MENU</numIndex>
+										<numIndex index="0">CHAR-LIST-ALL</numIndex>
+										<numIndex index="1">CHAR-LIST-ALL</numIndex>
 									</numIndex>
 									<numIndex index="1" type="array">
 										<numIndex index="0">CHAR-LIST</numIndex>

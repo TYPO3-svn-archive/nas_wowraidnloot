@@ -6,8 +6,10 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
+			<label index="noCharSelected">kein Charakter ausgewaehlt</label>
 		</languageKey>
 		<languageKey index="de" type="array">
+			<label index="noCharSelected">kein Charakter ausgewaehlt</label>
 		</languageKey>
 	</data>
 </T3locallang>

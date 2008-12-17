@@ -48,14 +48,35 @@ class tx_naswowraidnloot_pi1 extends tslib_pibase {
 	function main($content,$conf)	{
 		$this->conf=$conf;
 		$this->pi_setPiVarDefaults();
+		$this->pi_initPIflexForm();
 		$this->pi_loadLL();
 		
 		$template_file = t3lib_extMgm::siteRelPath('nas_wowraidnloot')."/res/main.html"; 
 		$this->tmpl = $this->cObj->fileResource($template_file);
 		
-		$content .= $this->getCharacter(1);
+		$this->type = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'displayType','sDEF');
+		$charId = 0;
+		switch ($this->type){
+			case 'CHAR-LIST-ALL': $content = $this->getCharList();
+				break;
+			case 'CHAR-LIST': $content = $this->getCharList($userId);
+				break;
+			case 'CHAR-SINGLE': 
+					if ($charId != 0){
+						$content = $this->getCharacter($charId);
+					} else {
+						$content = $this->pi_getLL('noCharSelected');
+					}
+				break;
+		}
 			
 		return $this->pi_wrapInBaseClass($content);
+	}
+	
+	function getCharList($userId = 0){
+		$content = '';
+		
+		return $content;
 	}
 	
 	function getCharacter($charId){
