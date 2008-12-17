@@ -138,7 +138,7 @@ $TCA["tx_naswowraidnloot_chars"] = array (
 				"maxitems" => 1,
 			)
 		),
-		"guild" => Array (		
+/*		"guild" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:nas_wowraidnloot/locallang_db.xml:tx_naswowraidnloot_chars.guild",		
 			"config" => Array (
@@ -150,7 +150,7 @@ $TCA["tx_naswowraidnloot_chars"] = array (
 				"maxitems" => 1,
 			)
 		),
-		"comments" => Array (		
+*/		"comments" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:nas_wowraidnloot/locallang_db.xml:tx_naswowraidnloot_chars.comments",		
 			"config" => Array (
