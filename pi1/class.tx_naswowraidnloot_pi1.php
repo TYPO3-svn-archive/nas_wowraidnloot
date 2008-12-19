@@ -54,27 +54,54 @@ class tx_naswowraidnloot_pi1 extends tslib_pibase {
 		$template_file = t3lib_extMgm::siteRelPath('nas_wowraidnloot')."/res/main.html"; 
 		$this->tmpl = $this->cObj->fileResource($template_file);
 		
-		$this->type = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'displayType','sDEF');
+		$this->types = explode(',',$this->pi_getFFvalue($this->cObj->data['pi_flexform'],'displayType','sDEF'));
+		$this->dPid = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'displayPid','sDEF');
 		$charId = 0;
-		switch ($this->type){
-			case 'CHAR-LIST-ALL': $content = $this->getCharList();
-				break;
-			case 'CHAR-LIST': $content = $this->getCharList($userId);
-				break;
-			case 'CHAR-SINGLE': 
-					if ($charId != 0){
-						$content = $this->getCharacter($charId);
-					} else {
-						$content = $this->pi_getLL('noCharSelected');
-					}
-				break;
+		$charId = $this->piVars['char_id'];
+		$userId = $GLOBALS['TSFE']->fe_user->user['uid'];
+		
+		foreach($this->types as $nr => $type){
+			switch ($type){
+				case 'CHAR-LIST-ALL': $content = $this->getCharList();
+					break;
+				case 'CHAR-LIST': $content = $this->getCharList($userId);
+					break;
+				case 'CHAR-SINGLE': 
+						if ($charId != 0){
+							$content = $this->getCharacter($charId);
+						} else {
+							$content = $this->pi_getLL('noCharSelected');
+						}
+					break;
+			}
 		}
 			
 		return $this->pi_wrapInBaseClass($content);
 	}
 	
-	function getCharList($userId = 0){
+	function getCharList($userId = -1){
 		$content = '';
+		
+		$where = '1=1 ';
+		if ($userId > -1) {
+			$where = ' AND player='.$userId;
+		}
+		$where .= $this->cObj->enableFields('tx_naswowraidnloot_chars');
+		
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_chars','1=1'.$where);
+		if ($res) {
+			$content .= '<ul>';
+			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
+				$content .= '<li>';
+				if ($this->dPid > 0){
+					$content .= $this->pi_linkToPage($row['name'],$this->dPid,'',array($this->prefixId.'[char_id]'=>$row['uid']));
+				} else {
+					$content .= $this->pi_linkTP($row['name'],array($this->prefixId.'[char_id]'=>$row['uid']));
+				}
+				$content .= '</li>';
+			}
+			$content .= '</ul>';
+		}
 		
 		return $content;
 	}

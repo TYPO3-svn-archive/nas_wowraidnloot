@@ -29,6 +29,7 @@
 			<label index="tx_naswowraidnloot_collected.charid">char id</label>
 			<label index="tx_naswowraidnloot_raid">Raid</label>
 			<label index="tx_naswowraidnloot_raid.title">title</label>
+			<label index="tx_naswowraidnloot_raid.open">show all</label>
 			<label index="tx_naswowraidnloot_raid.destinationid">destination id</label>
 			<label index="tx_naswowraidnloot_raid.start">start</label>
 			<label index="tx_naswowraidnloot_raid.end">end</label>
@@ -64,6 +65,7 @@
 			<label index="tx_naswowraidnloot_collected.lootdate">Loot Datum</label>
 			<label index="tx_naswowraidnloot_collected.charid">Char ID</label>
 			<label index="tx_naswowraidnloot_raid">raid</label>
+			<label index="tx_naswowraidnloot_raid.open">für alle Sichtbar</label>
 			<label index="tx_naswowraidnloot_raid.title">Titel</label>
 			<label index="tx_naswowraidnloot_raid.destinationid">Zielort ID</label>
 			<label index="tx_naswowraidnloot_raid.start">Startzeit</label>

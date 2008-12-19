@@ -83,7 +83,7 @@ $TCA["tx_naswowraidnloot_collected"] = array (
 $TCA["tx_naswowraidnloot_raid"] = array (
 	"ctrl" => array (
 		'title'     => 'LLL:EXT:nas_wowraidnloot/locallang_db.xml:tx_naswowraidnloot_raid',		
-		'label'     => 'uid',	
+		'label'     => 'title',	
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
@@ -96,7 +96,7 @@ $TCA["tx_naswowraidnloot_raid"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_naswowraidnloot_raid.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, title, destinationid, start, end, member, points, pointspboss",
+		"fe_admin_fieldList" => "hidden, open, title, destinationid, start, end, member, points, pointspboss",
 	)
 );
 
@@ -111,6 +111,8 @@ t3lib_extMgm::addStaticFile($_EXTKEY,"pi1/static/","Manage Characters");
 t3lib_div::loadTCA('tt_content');
 $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY.'_pi2']='layout,select_key';
 t3lib_extMgm::addPlugin(array('LLL:EXT:nas_wowraidnloot/locallang_db.xml:tt_content.list_type_pi2', $_EXTKEY.'_pi2'),'list_type');
+$TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY.'_pi2']='pi_flexform';
+t3lib_extMgm::addPiFlexFormValue($_EXTKEY.'_pi2','FILE:EXT:nas_wowraidnloot/pi2/flexform.xml');
 t3lib_extMgm::addStaticFile($_EXTKEY,"pi2/static/","Manage Raids");
 
 t3lib_div::loadTCA('tt_content');

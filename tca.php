@@ -302,7 +302,7 @@ $TCA["tx_naswowraidnloot_collected"] = array (
 $TCA["tx_naswowraidnloot_raid"] = array (
 	"ctrl" => $TCA["tx_naswowraidnloot_raid"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,title,destinationid,start,end,member,points,pointspboss"
+		"showRecordFieldList" => "hidden,open,title,destinationid,start,end,member,points,pointspboss"
 	),
 	"feInterface" => $TCA["tx_naswowraidnloot_raid"]["feInterface"],
 	"columns" => array (
@@ -312,6 +312,14 @@ $TCA["tx_naswowraidnloot_raid"] = array (
 			'config'  => array (
 				'type'    => 'check',
 				'default' => '0'
+			)
+		),
+		'open' => array (		
+			'exclude' => 1,
+			'label'   => 'LLL:EXT:nas_wowraidnloot/locallang_db.xml:tx_naswowraidnloot_raid.open',
+			'config'  => array (
+				'type'    => 'check',
+				'default' => '1'
 			)
 		),
 		"title" => Array (		
@@ -327,13 +335,13 @@ $TCA["tx_naswowraidnloot_raid"] = array (
 			"label" => "LLL:EXT:nas_wowraidnloot/locallang_db.xml:tx_naswowraidnloot_raid.destinationid",		
 			"config" => Array (
 				"type"     => "input",
-				"size"     => "4",
-				"max"      => "4",
+				"size"     => "10",
+				"max"      => "10",
 				"eval"     => "int",
 				"checkbox" => "0",
 				"range"    => Array (
-					"upper" => "1000",
-					"lower" => "10"
+					"upper" => "100000",
+					"lower" => "0"
 				),
 				"default" => 0
 			)
@@ -409,7 +417,7 @@ $TCA["tx_naswowraidnloot_raid"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, title;;;;2-2-2, destinationid;;;;3-3-3, start, end, member, points, pointspboss")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, open;;1;;1-1-1, title;;;;2-2-2, destinationid;;;;3-3-3, start, end, member, points, pointspboss")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")

@@ -35,8 +35,18 @@
 								<selectedListStyle>width:150px</selectedListStyle>
 								<itemListStyle>width:150px</itemListStyle>
 							</config>
-							</TCEforms>
+						</TCEforms>
 					</displayType>
+					<displayPid>
+						<TCEforms>
+						   <label>LLL:EXT:nas_wowraidnloot/locallang.xml:tt_content.pi_flexform.display_pid</label>
+								<config>
+								<type>input</type>
+								<size>5</size>
+								<eval>int</eval>
+							</config>
+						</TCEforms>
+					</displayPid>
 				</el>
 			</ROOT>
 		</sDEF>

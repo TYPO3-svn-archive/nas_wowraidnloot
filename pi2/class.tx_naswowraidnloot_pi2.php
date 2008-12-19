@@ -23,6 +23,8 @@
 ***************************************************************/
 
 require_once(PATH_tslib.'class.tslib_pibase.php');
+// date2cal, modified to work in the frontend
+require_once(t3lib_extMgm::extPath('nas_wowraidnloot').'res/class.frontend_JScalendar.php');
 
 
 /**
@@ -48,25 +50,189 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 	function main($content,$conf)	{
 		$this->conf=$conf;
 		$this->pi_setPiVarDefaults();
+		$this->pi_initPIflexForm();
 		$this->pi_loadLL();
+
+		$content = '';
 		
-	
-		$content='
-			<strong>This is a few paragraphs:</strong><br />
-			<p>This is line 1</p>
-			<p>This is line 2</p>
-	
-			<h3>This is a form:</h3>
-			<form action="'.$this->pi_getPageLink($GLOBALS['TSFE']->id).'" method="POST">
-				<input type="hidden" name="no_cache" value="1">
-				<input type="text" name="'.$this->prefixId.'[input_field]" value="'.htmlspecialchars($this->piVars['input_field']).'">
-				<input type="submit" name="'.$this->prefixId.'[submit_button]" value="'.htmlspecialchars($this->pi_getLL('submit_button_label')).'">
-			</form>
-			<br />
-			<p>You can click here to '.$this->pi_linkToPage('get to this page again',$GLOBALS['TSFE']->id).'</p>
-		';
+		//make the date2cal instance
+        if (t3lib_extMgm::isLoaded('date2cal')) {
+            $this->date2cal = frontend_JScalendar::getInstance();
+        } else {
+            return '<p class="error">' . $this->pi_getLL('error_date2cal_not_loaded') . '</p>';
+        }
+		
+		$template_file = t3lib_extMgm::siteRelPath('nas_wowraidnloot')."/res/main.html"; 
+		$this->tmpl = $this->cObj->fileResource($template_file);
+		
+		$this->types = explode(',',$this->pi_getFFvalue($this->cObj->data['pi_flexform'],'displayType','sDEF'));
+		$this->singlePid = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'displaySingle','sDEF');
+		$this->newPid = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'displayNew','sDEF');
+		$this->editPid = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'displayEdit','sDEF');
+		$this->backPid = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'displayBack','sDEF');
+		//t3lib_div::devLog('types', $this->extKey, 0, $this->types);
+		
+		$userId = $GLOBALS['TSFE']->fe_user->user['uid'];
+		$raidId = $this->piVars['raid_id'];
+		
+		foreach($this->types as $nr => $type){
+			switch ($type){
+				case 'MENU': $content .= $this->getMenu($userId);
+					break;
+				case 'RAID-LIST': $content .= $this->getRaidList($userId);
+					break;
+				case 'RAID-SINGLE': 
+						if ($raidId != 0){
+							$content .= $this->getRaid($raidId);
+						} else {
+							$content .= $this->pi_getLL('noRaidSelected');
+						}
+					break;
+				case 'RAID-NEW': $content .= $this->getNewForm($userId);
+					break;
+				case 'RAID-EDIT': $content .= $this->getEditForm($userId, $raidId);
+					break;
+			}
+		}
 	
 		return $this->pi_wrapInBaseClass($content);
+	}
+	
+	function getMenu($userId = 0){
+		$content = '<p>';
+		$list = '';
+		if ($this->newPid){
+			$list .= '<li>'.$this->pi_linkToPage($this->pi_getLL('newRaid'),$this->newPid).'</li>';
+		}
+		if ($this->backPid){
+			$list .= '<li>'.$this->pi_linkToPage($this->pi_getLL('back'),$this->backPid).'</li>';
+		}
+		
+		if ($list != ''){
+			$content .= '<ul>'.$list.'</ul>';
+		}
+		$content .= '</p>';
+		return $content;
+	}
+	
+	function getRaidList($userId = 0){
+		$content = '<p>';
+		
+		$content .= '</p>';
+		
+		return $content;
+	}
+	
+	function getRaid($raidId){
+		$content = '';
+		return $content;
+	}
+	
+	function getNewForm($userId = 0){
+		$content = '';
+		$markerArray = array();
+		$markerArray['###PI###'] = $this->prefixId;
+		
+		//Falls kein Kalenderfeld geladen wird
+		$markerArray['###DATE2CAL_JS###'] = '';
+		// date2cal js for singleview
+        $markerArray['###DATE2CAL_JS###'] = $this->date2cal->getMainJS();
+        	
+		$markerArray['###TITLE###'] = $this->pi_getLL('title');
+		$markerArray['###OPEN###'] = $this->pi_getLL('open');
+		$markerArray['###DESTINATION###'] = $this->pi_getLL('destination');
+		$markerArray['###DESTINATION_SELECT###'] = $this->getDestSelect();
+		$markerArray['###START###'] = $this->pi_getLL('start');
+		$prefillValue = '';
+		// render the datefield using the date2cal extension
+		$field = $this->prefixId . '[start]';
+		$this->date2cal->config['inputField'] = $field;
+		$this->date2cal->config['calConfig']['ifFormat'] = '%d-%m-%Y %H:%M';
+		$this->date2cal->setConfigOption('ifFormat', '%d-%m-%Y %H:%M');
+		$this->date2cal->setConfigOption('showsTime', 1, true);
+		$this->date2cal->setConfigOption('time24', 1, true);
+		$fieldContent = $this->date2cal->render($prefillValue, $field);
+		$markerArray['###START_FIELD###'] = $fieldContent;
+		$markerArray['###END###'] = $this->pi_getLL('end');
+		// render the datefield using the date2cal extension
+		$field = $this->prefixId . '[end]';
+		$this->date2cal->config['inputField'] = $field;
+		$this->date2cal->config['calConfig']['ifFormat'] = '%d-%m-%Y %H:%M';
+		$this->date2cal->setConfigOption('ifFormat', '%d-%m-%Y %H:%M');
+		$this->date2cal->setConfigOption('showsTime', 1, true);
+		$this->date2cal->setConfigOption('time24', 1, true);
+		$fieldContent = $this->date2cal->render($prefillValue, $field);
+		$markerArray['###END_FIELD###'] = $fieldContent;
+		
+		$content = $this->renderContent('###NEW_RAID###',$markerArray);
+		
+		return $content;
+	}
+	
+	function getEditForm($userId, $raidId){
+		$content = '';
+		return $content;
+	}
+	
+	function getDestSelect() {
+		$content = '';
+		
+		$useragent = "Mozilla/5.0 (Windows; U; Windows NT 5.0; de-DE; rv:1.6)Gecko/20040206 Firefox/1.0.1"; 
+		ini_set('user_agent',$useragent); 
+		header('Content-Type: text/html; charset=utf-8');
+		# URL vorbereiten
+		$URL = "http://eu.wowarmory.com/data/dungeonStrings.xml";
+ 		# CURL initialisieren und XML-Datei laden
+		$curl = curl_init();
+ 
+		curl_setopt ($curl, CURLOPT_URL, $URL);
+		curl_setopt($curl, CURLOPT_USERAGENT, $useragent);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+ 
+		$load = curl_exec($curl);
+		curl_close($curl);
+		
+		# eingelesenen String zu SimpleXMLElement umformen
+		$xml = new SimpleXMLElement($load);
+		
+		//foreach($xml->attributes() as $a => $b) {
+		//   	$content .= $a.'="'.$b."\"<br>";
+		//}
+		
+		# Namen und IDs der Dungeons ausgeben
+		$dungeons = array();
+		foreach ($xml->dungeons->dungeon as $lair){
+			foreach($lair->attributes() as $a => $b) {
+				$dungeons[intval($lair['id'])][$a] = (string)$b;
+				//$markerArray['###'.strtoupper($a).'###'] = (string)$b;
+		    	//$content .= $a.'="'.$b."\"<br>";
+			}			
+		}
+		$select = '';
+		foreach ($dungeons as $id => $dungeon){
+			$select .= '<option value="'.$dungeon['id'].'">'.$dungeon['name'].'</option>';
+		}
+		if ($select != ''){
+				$content .= '<select id="'.$this->prefixId.'[dungeonid]" name="'.$this->prefixId.'[dungeonId]">'.$select.'</select>';
+		}
+		//t3lib_div::devLog('dungeons', $this->extKey, 0, $dungeons);
+		
+		return $content;
+	}
+	
+	function renderContent($subpart, $markerArray) {
+	  	$wrappedSubpartArray = array();
+	  	if ($this->errorText == '') {
+	  		$markerArray['###ERROR###'] = '';
+	  	} else {
+	  		$markerArray['###ERRORCLASS###'] = 'error';
+			$markerArray['###ERROR###'] = $this->errorText;
+	  	}
+
+	    $subpart = $this->cObj->getSubpart($this->tmpl,$subpart);
+	    $content = $this->cObj->substituteMarkerArrayCached($subpart, $markerArray, array(), $wrappedSubpartArray);
+
+	    return $content;
 	}
 }
 

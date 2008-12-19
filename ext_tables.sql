@@ -112,6 +112,7 @@ CREATE TABLE tx_naswowraidnloot_raid (
 	cruser_id int(11) DEFAULT '0' NOT NULL,
 	deleted tinyint(4) DEFAULT '0' NOT NULL,
 	hidden tinyint(4) DEFAULT '0' NOT NULL,
+	open tinyint(4) DEFAULT '0' NOT NULL,
 	title tinytext NOT NULL,
 	destinationid int(11) DEFAULT '0' NOT NULL,
 	start int(11) DEFAULT '0' NOT NULL,
