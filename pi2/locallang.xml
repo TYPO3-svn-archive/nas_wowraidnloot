@@ -8,12 +8,28 @@
 		<languageKey index="default" type="array">
 			<label index="noRaidSelected">kein Raid ausgewaehlt</label>
 			<label index="newRaid">neuer Raid</label>
+			<label index="editRaid">bearbeiten</label>
+			<label index="noRaid">kein Raid vorhanden</label>
+			<label index="noRaidFound">kein Raid gefunden</label>
 			
+			<label index="newRaid_saved">neuer Raid gespeichert</label>
+			<label index="raid_saved">Raid gespeichert</label>
+			<label index="loot_saved">Loot gespeichert</label>
+			
+			<label index="armory_notFound">In Armory nicht gefunden.</label>
+						
 			<label index="title">Raid-Titel</label>
 			<label index="open">sichtbar (fuer jedermann)</label>
 			<label index="destination">Raid-Ziel</label>
 			<label index="start">Start</label>
 			<label index="end">End</label>
+			<label index="member">Teilnehmer</label>
+			<label index="leader">Raidleitung</label>
+			<label index="boss">Boss</label>
+			<label index="item">Gegenstand</label>
+			
+			<label index="save">Raid speichern</label>
+			<label index="save_loot">zuweisen</label>
 			
 			<label index="back">Zurueck</label>
 		</languageKey>

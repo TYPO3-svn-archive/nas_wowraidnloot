@@ -7,6 +7,7 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="tt_content.pi_flexform.sheet_general">general</label>
+			<label index="tt_content.pi_flexform.storage_pid">Pid Sysordner für Raids</label>
 			<label index="tt_content.pi_flexform.display_type">Anzeigen Typ</label>
 			<label index="tt_content.pi_flexform.display_single">Seite zum Anzeigen</label>
 			<label index="tt_content.pi_flexform.display_new">Seite für Neuen Eintrag</label>
@@ -15,6 +16,7 @@
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="tt_content.pi_flexform.sheet_general">general</label>
+			<label index="tt_content.pi_flexform.storagePid">Pid Sysordner für Raids</label>
 			<label index="tt_content.pi_flexform.display_type">Anzeigen Typ</label>
 			<label index="tt_content.pi_flexform.display_single">Seite zum Anzeigen</label>
 			<label index="tt_content.pi_flexform.display_new">Seite für Neuen Eintrag</label>

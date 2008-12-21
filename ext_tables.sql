@@ -78,6 +78,7 @@ CREATE TABLE tx_naswowraidnloot_collected (
 	itemname tinytext NOT NULL,
 	lootdate int(11) DEFAULT '0' NOT NULL,
 	charid blob NOT NULL,
+	raidid blob NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
@@ -120,6 +121,7 @@ CREATE TABLE tx_naswowraidnloot_raid (
 	member int(11) DEFAULT '0' NOT NULL,
 	points int(11) DEFAULT '0' NOT NULL,
 	pointspboss int(11) DEFAULT '0' NOT NULL,
+	leader int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

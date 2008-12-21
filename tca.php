@@ -228,7 +228,7 @@ $TCA["tx_naswowraidnloot_chars"] = array (
 $TCA["tx_naswowraidnloot_collected"] = array (
 	"ctrl" => $TCA["tx_naswowraidnloot_collected"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,itemid,itemname,lootdate,charid"
+		"showRecordFieldList" => "hidden,itemid,itemname,lootdate,charid,raidid"
 	),
 	"feInterface" => $TCA["tx_naswowraidnloot_collected"]["feInterface"],
 	"columns" => array (
@@ -288,9 +288,21 @@ $TCA["tx_naswowraidnloot_collected"] = array (
 				"maxitems" => 1,
 			)
 		),
+		"raidid" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:nas_wowraidnloot/locallang_db.xml:tx_naswowraidnloot_collected.raidid",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "tx_naswowraidnloot_raid",	
+				"size" => 1,	
+				"minitems" => 0,
+				"maxitems" => 1,
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, itemid, itemname, lootdate, charid")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, itemid, itemname, lootdate, charid, raidid")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
@@ -302,7 +314,7 @@ $TCA["tx_naswowraidnloot_collected"] = array (
 $TCA["tx_naswowraidnloot_raid"] = array (
 	"ctrl" => $TCA["tx_naswowraidnloot_raid"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,open,title,destinationid,start,end,member,points,pointspboss"
+		"showRecordFieldList" => "hidden,open,title,destinationid,start,end,member,points,pointspboss,leader"
 	),
 	"feInterface" => $TCA["tx_naswowraidnloot_raid"]["feInterface"],
 	"columns" => array (
@@ -383,7 +395,7 @@ $TCA["tx_naswowraidnloot_raid"] = array (
 				"MM" => "tx_naswowraidnloot_raid_member_mm",
 			)
 		),
-		"points" => Array (		
+/*		"points" => Array (		
 			"exclude" => 1,		
 			"label" => "LLL:EXT:nas_wowraidnloot/locallang_db.xml:tx_naswowraidnloot_raid.points",		
 			"config" => Array (
@@ -415,9 +427,21 @@ $TCA["tx_naswowraidnloot_raid"] = array (
 				"default" => 0
 			)
 		),
+*/		"leader" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:nas_wowraidnloot/locallang_db.xml:tx_naswowraidnloot_raid.leader",		
+			"config" => Array (
+				"type" => "group",	
+				"internal_type" => "db",	
+				"allowed" => "fe_users",
+				"size" => 1,
+				"minitems" => 0,
+				"maxitems" => 1,
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, open;;1;;1-1-1, title;;;;2-2-2, destinationid;;;;3-3-3, start, end, member, points, pointspboss")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, open;;1;;1-1-1, title;;;;2-2-2, destinationid;;;;3-3-3, start, end, member, points, pointspboss, leader")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")

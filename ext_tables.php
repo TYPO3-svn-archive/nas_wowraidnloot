@@ -63,7 +63,7 @@ $TCA["tx_naswowraidnloot_chars"] = array (
 $TCA["tx_naswowraidnloot_collected"] = array (
 	"ctrl" => array (
 		'title'     => 'LLL:EXT:nas_wowraidnloot/locallang_db.xml:tx_naswowraidnloot_collected',		
-		'label'     => 'itemname',	
+		'label'     => 'itemid',	
 		'tstamp'    => 'tstamp',
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
@@ -76,7 +76,7 @@ $TCA["tx_naswowraidnloot_collected"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_naswowraidnloot_collected.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, itemid, itemname, lootdate, charid",
+		"fe_admin_fieldList" => "hidden, itemid, itemname, lootdate, charid, raidid",
 	)
 );
 
@@ -96,7 +96,7 @@ $TCA["tx_naswowraidnloot_raid"] = array (
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_naswowraidnloot_raid.gif',
 	),
 	"feInterface" => array (
-		"fe_admin_fieldList" => "hidden, open, title, destinationid, start, end, member, points, pointspboss",
+		"fe_admin_fieldList" => "hidden, open, title, destinationid, start, end, member, points, pointspboss, leader",
 	)
 );
 

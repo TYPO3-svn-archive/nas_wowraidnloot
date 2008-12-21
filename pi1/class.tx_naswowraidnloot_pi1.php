@@ -79,16 +79,16 @@ class tx_naswowraidnloot_pi1 extends tslib_pibase {
 		return $this->pi_wrapInBaseClass($content);
 	}
 	
-	function getCharList($userId = -1){
+	function getCharList($userId = 0){
 		$content = '';
 		
 		$where = '1=1 ';
-		if ($userId > -1) {
-			$where = ' AND player='.$userId;
+		if ($userId > 0) {
+			$where .= ' AND player='.$userId;
 		}
 		$where .= $this->cObj->enableFields('tx_naswowraidnloot_chars');
 		
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_chars','1=1'.$where);
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_chars',$where);
 		if ($res) {
 			$content .= '<ul>';
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
@@ -148,7 +148,7 @@ class tx_naswowraidnloot_pi1 extends tslib_pibase {
 			$markerArray['###'.strtoupper($a).'###'] = (string)$b;
     		//$content .= $a.'="'.$b."\"<br>";
 		}
-		t3lib_div::devLog('markerArray', $this->extKey, 0, $markerArray);
+		//t3lib_div::devLog('markerArray', $this->extKey, 0, $markerArray);
 		$img_add = 'default';
 		$char_level = $xml->characterInfo->character['level'];
 		if ($char_level >= 70){
