@@ -1,0 +1,110 @@
+<T3DataStructure>
+	<meta>
+		<langDisable>1</langDisable>
+		<!-- <langChildren>1</langChildren>!-->
+	</meta>
+	<sheets>
+		<sDEF>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:nas_wowraidnloot/locallang.xml:tt_content.pi_flexform.sheet_general</sheetTitle>
+				</TCEforms>
+				<el>
+					<storagePid>
+						<TCEforms>
+						   <label>LLL:EXT:nas_wowraidnloot/locallang.xml:tt_content.pi_flexform.storage_pid</label>
+								<config>
+								<type>input</type>
+								<size>5</size>
+								<eval>int</eval>
+							</config>
+						</TCEforms>
+					</storagePid>
+					<displayType>
+						<TCEforms>
+						   <label>LLL:EXT:nas_wowraidnloot/locallang.xml:tt_content.pi_flexform.display_type</label>
+								<config>
+								<type>select</type>
+								<items type="array">
+									<numIndex index="0" type="array">
+										<numIndex index="0">MENU</numIndex>
+										<numIndex index="1">MENU</numIndex>
+									</numIndex>
+									<numIndex index="1" type="array">
+										<numIndex index="0">RAID-LIST-ALL</numIndex>
+										<numIndex index="1">RAID-LIST-ALL</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">RAID-LIST-MEMBER</numIndex>
+										<numIndex index="1">RAID-LIST-MEMBER</numIndex>
+									</numIndex>
+									<numIndex index="3" type="array">
+										<numIndex index="0">RAID-LIST-LEADER</numIndex>
+										<numIndex index="1">RAID-LIST-LEADER</numIndex>
+									</numIndex>
+									<numIndex index="4" type="array">
+										<numIndex index="0">RAID-SINGLE</numIndex>
+										<numIndex index="1">RAID-SINGLE</numIndex>
+									</numIndex>
+									<numIndex index="5" type="array">
+										<numIndex index="0">RAID-NEW</numIndex>
+										<numIndex index="1">RAID-NEW</numIndex>
+									</numIndex>
+									<numIndex index="6" type="array">
+										<numIndex index="0">RAID-EDIT</numIndex>
+										<numIndex index="1">RAID-EDIT</numIndex>
+									</numIndex>
+								</items>
+								<maxitems>10</maxitems>
+								<size>5</size>
+								<multiple>1</multiple>
+								<selectedListStyle>width:150px</selectedListStyle>
+								<itemListStyle>width:150px</itemListStyle>
+							</config>
+						</TCEforms>
+					</displayType>
+					<displaySingle>
+						<TCEforms>
+						   <label>LLL:EXT:nas_wowraidnloot/locallang.xml:tt_content.pi_flexform.display_single</label>
+								<config>
+								<type>input</type>
+								<size>5</size>
+								<eval>int</eval>
+							</config>
+						</TCEforms>
+					</displaySingle>
+					<displayNew>
+						<TCEforms>
+						   <label>LLL:EXT:nas_wowraidnloot/locallang.xml:tt_content.pi_flexform.display_new</label>
+								<config>
+								<type>input</type>
+								<size>5</size>
+								<eval>int</eval>
+							</config>
+						</TCEforms>
+					</displayNew>
+					<displayEdit>
+						<TCEforms>
+						   <label>LLL:EXT:nas_wowraidnloot/locallang.xml:tt_content.pi_flexform.display_edit</label>
+								<config>
+								<type>input</type>
+								<size>5</size>
+								<eval>int</eval>
+							</config>
+						</TCEforms>
+					</displayEdit>
+					<displayBack>
+						<TCEforms>
+						   <label>LLL:EXT:nas_wowraidnloot/locallang.xml:tt_content.pi_flexform.display_back</label>
+								<config>
+								<type>input</type>
+								<size>5</size>
+								<eval>int</eval>
+							</config>
+						</TCEforms>
+					</displayBack>
+				</el>
+			</ROOT>
+		</sDEF>
+	</sheets>
+</T3DataStructure>
