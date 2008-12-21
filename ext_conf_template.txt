@@ -1,0 +1,5 @@
+# cat=basic/enable; type=int+; label=Admin User Group
+admin_group = 0
+
+# cat=basic/enable; type=int+; label=Raid Manager User Group
+manage_group = 0

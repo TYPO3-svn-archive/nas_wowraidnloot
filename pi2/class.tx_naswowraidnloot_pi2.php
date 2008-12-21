@@ -57,7 +57,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		$this->pi_loadLL();
 
 		$content = '';
-		t3lib_div::devLog('piVars', $this->extKey, 0, $this->piVars);
+		//t3lib_div::devLog('piVars', $this->extKey, 0, $this->piVars);
 		
 		//make the date2cal instance
         if (t3lib_extMgm::isLoaded('date2cal')) {
