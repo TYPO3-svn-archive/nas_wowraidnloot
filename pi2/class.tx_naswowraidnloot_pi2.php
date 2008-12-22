@@ -223,12 +223,12 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 				
 		$where = '1=1 ';
 		if ($type == 'leader'){
-			$where .= ' AND (leader=\''.$userId.'\' OR leader=\''.$userId.',%\' OR leader=\'%,'.$userId.',% OR leader=\''.$userId.',%)';
+			$where .= ' AND (leader=\''.$userId.'\' OR leader=\''.$userId.',%\' OR leader=\'%,'.$userId.',%\' OR leader=\''.$userId.',%\')';
 		} elseif ($type == 'all'){
 			$where .= ' AND open=1';
 		}
 		$where .= $this->cObj->enableFields('tx_naswowraidnloot_raid');
-		
+		t3lib_div::devLog('where', $this->extKey, 0, $where);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_raid',$where);
 		//t3lib_div::devLog('setMember', $this->extKey, 0, $GLOBALS['TYPO3_DB']->SELECTquery('*','tx_naswowraidnloot_raid',$where));
 		if ($res) {
