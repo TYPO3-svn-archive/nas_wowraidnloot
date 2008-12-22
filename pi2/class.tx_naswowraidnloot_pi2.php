@@ -223,7 +223,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 				
 		$where = '1=1 ';
 		if ($type == 'leader'){
-			$where .= ' AND leader='.$userId;
+			$where .= ' AND (leader=\''.$userId.'\' OR leader=\''.$userId.',%\' OR leader=\'%,'.$userId.',% OR leader=\''.$userId.',%)';
 		} elseif ($type == 'all'){
 			$where .= ' AND open=1';
 		}
@@ -400,7 +400,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 			$markerArray['###SAVE_LOOT###'] = $this->pi_getLL('save_loot');
 			// Raid-Leader
 			$markerArray['###LEADER###'] = $this->pi_getLL('leader');
-			$markerArray['###LEADER_OPTIONS###'] = $this->getLeaderOptions($userId);
+			$markerArray['###LEADER_OPTIONS###'] = $this->getLeaderOptions($raidId);
 			
 			$content = $this->renderContent('###EDIT_RAID###',$markerArray);
 		} else {
@@ -639,14 +639,18 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		return $content;
 	}
 	
-	function getLeaderOptions($userId){
-		$options = '<option value="0">---</option>';
-				
+	function getLeaderOptions($raidId){
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('leader','tx_naswowraidnloot_raid','uid='.$raidId);
+		if ($res){
+			$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+			$leader = explode(',',$row['leader']);
+		}
+		
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','fe_users','1=1'.$this->cObj->enableFields('fe_users'));
 		if ($res){
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
 				$options .= '<option value="'.$row['uid'].'" ';
-				if ($row['uid'] == $userId){
+				if (in_array($row['uid'],$leader)){
 					$options .= ' selected ';
 				}
 				$options .= '>'.$row['username'].'</option>';
