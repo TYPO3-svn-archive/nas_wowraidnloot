@@ -13,6 +13,8 @@
 			<label index="tt_content.pi_flexform.display_new">Seite für Neuen Eintrag</label>
 			<label index="tt_content.pi_flexform.display_edit">Seite Beitrag bearbeiten</label>
 			<label index="tt_content.pi_flexform.display_back">Seite Zurücklink</label>
+			<label index="tt_content.pi_flexform.display_my">Seite Liste Raids als Teilnehmer</label>
+			<label index="tt_content.pi_flexform.display_lead">Seite Liste Raids als Leader</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="tt_content.pi_flexform.sheet_general">general</label>
@@ -22,6 +24,8 @@
 			<label index="tt_content.pi_flexform.display_new">Seite für Neuen Eintrag</label>
 			<label index="tt_content.pi_flexform.display_edit">Seite Beitrag bearbeiten</label>
 			<label index="tt_content.pi_flexform.display_back">Seite Zurücklink</label>
+			<label index="tt_content.pi_flexform.display_my">Seite Liste Raids als Teilnehmer</label>
+			<label index="tt_content.pi_flexform.display_lead">Seite Liste Raids als Leader</label>
 		</languageKey>
 	</data>
 </T3locallang>

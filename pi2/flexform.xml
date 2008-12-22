@@ -103,6 +103,26 @@
 							</config>
 						</TCEforms>
 					</displayBack>
+					<displayMy>
+						<TCEforms>
+						   <label>LLL:EXT:nas_wowraidnloot/locallang.xml:tt_content.pi_flexform.display_my</label>
+								<config>
+								<type>input</type>
+								<size>5</size>
+								<eval>int</eval>
+							</config>
+						</TCEforms>
+					</displayMy>
+					<displayLead>
+						<TCEforms>
+						   <label>LLL:EXT:nas_wowraidnloot/locallang.xml:tt_content.pi_flexform.display_lead</label>
+								<config>
+								<type>input</type>
+								<size>5</size>
+								<eval>int</eval>
+							</config>
+						</TCEforms>
+					</displayLead>
 				</el>
 			</ROOT>
 		</sDEF>

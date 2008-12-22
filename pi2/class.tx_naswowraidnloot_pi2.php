@@ -55,9 +55,11 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		$this->pi_setPiVarDefaults();
 		$this->pi_initPIflexForm();
 		$this->pi_loadLL();
+		//$this->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['nas_wowraidnloot']);
 
 		$content = '';
 		//t3lib_div::devLog('piVars', $this->extKey, 0, $this->piVars);
+		t3lib_div::devLog('extConf', $this->extKey, 0, $this->extConf);
 		
 		//make the date2cal instance
         if (t3lib_extMgm::isLoaded('date2cal')) {
@@ -76,6 +78,8 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		$this->newPid = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'displayNew','sDEF');
 		$this->editPid = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'displayEdit','sDEF');
 		$this->backPid = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'displayBack','sDEF');
+		$this->myPid = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'displayMy','sDEF');
+		$this->leadPid = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'displayLead','sDEF');
 		//t3lib_div::devLog('types', $this->extKey, 0, $this->types);
 		
 		$userId = $GLOBALS['TSFE']->fe_user->user['uid'];
@@ -188,15 +192,25 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 	function getMenu($userId = 0){
 		$content = '<p>';
 		$list = '';
-		if ($this->newPid){
+		
+		$usergroups = explode(',',$GLOBALS['TSFE']->fe_user->user['usergroup']);
+		//t3lib_div::devLog('usergroups', $this->extKey, 0, $usergroups);
+		//$admingroup = $this->
+		if ($this->newPid AND in_array($this->extConf['manage_group'],$usergroups)){
 			$list .= '<li>'.$this->pi_linkToPage($this->pi_getLL('newRaid'),$this->newPid).'</li>';
 		}
 		if ($this->backPid){
 			$list .= '<li>'.$this->pi_linkToPage($this->pi_getLL('back'),$this->backPid).'</li>';
 		}
+		if ($this->myPid){
+			$list .= '<li>'.$this->pi_linkToPage($this->pi_getLL('myRaids'),$this->myPid).'</li>';
+		}
+		if ($this->leadPid){
+			$list .= '<li>'.$this->pi_linkToPage($this->pi_getLL('myLeads'),$this->leadPid).'</li>';
+		}
 		
 		if ($list != ''){
-			$content .= '<ul>'.$list.'</ul>';
+			$content .= '<div id="raid_menu"><ul>'.$list.'</ul></div>';
 		}
 		$content .= '</p>';
 		return $content;
@@ -239,10 +253,12 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 							$content .= '<span class="edit_link">'.$this->pi_linkToPage($this->pi_getLL('editRaid'),$this->editPid,'',array($this->prefixId.'[raid_id]'=>$row['uid'])).'</span>';
 						}
 					}
+					setlocale(LC_ALL,'de_DE.utf8');
+					$title_line = $row['title'].' ('.strftime("%A, %e. %b. %Y",$row['start']).')';
 					if ($this->singlePid > 0){
-						$content .= $this->pi_linkToPage($row['title'],$this->singlePid,'',array($this->prefixId.'[raid_id]'=>$row['uid']));
+						$content .= $this->pi_linkToPage($title_line,$this->singlePid,'',array($this->prefixId.'[raid_id]'=>$row['uid']));
 					} else {
-						$content .= $this->pi_linkTP($row['title'],array($this->prefixId.'[raid_id]'=>$row['uid']));
+						$content .= $this->pi_linkTP($title_line,array($this->prefixId.'[raid_id]'=>$row['uid']));
 					}
 					$content .= '</li>';
 				}

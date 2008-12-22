@@ -8,6 +8,8 @@
 		<languageKey index="default" type="array">
 			<label index="noRaidSelected">kein Raid ausgewaehlt</label>
 			<label index="newRaid">neuer Raid</label>
+			<label index="myRaids">meine Raids</label>
+			<label index="myLeads">meine Leitungen</label>
 			<label index="editRaid">bearbeiten</label>
 			<label index="noRaid">kein Raid vorhanden</label>
 			<label index="noRaidFound">kein Raid gefunden</label>
