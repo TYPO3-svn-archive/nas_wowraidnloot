@@ -55,7 +55,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		$this->pi_setPiVarDefaults();
 		$this->pi_initPIflexForm();
 		$this->pi_loadLL();
-		//$this->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['nas_wowraidnloot']);
+		$this->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['nas_wowraidnloot']);
 
 		$content = '';
 		//t3lib_div::devLog('piVars', $this->extKey, 0, $this->piVars);
