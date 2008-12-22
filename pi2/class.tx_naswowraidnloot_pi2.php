@@ -249,7 +249,8 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 				if ($show){
 					$content .= '<li>';
 					if ($this->editPid > 0 and $userId > 0){
-						if ($row['leader'] == $userId){
+						$leaders = explode(',',$row['leader']);
+						if (in_array($userId,$leaders)){
 							$content .= '<span class="edit_link">'.$this->pi_linkToPage($this->pi_getLL('editRaid'),$this->editPid,'',array($this->prefixId.'[raid_id]'=>$row['uid'])).'</span>';
 						}
 					}
