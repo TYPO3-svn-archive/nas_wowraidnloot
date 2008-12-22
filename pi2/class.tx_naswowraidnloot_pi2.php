@@ -195,8 +195,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		$list = '';
 		
 		$usergroups = explode(',',$GLOBALS['TSFE']->fe_user->user['usergroup']);
-		//t3lib_div::devLog('usergroups', $this->extKey, 0, $usergroups);
-		//$admingroup = $this->
+		t3lib_div::devLog('usergroups', $this->extKey, 0, $usergroups);
 		if ($this->newPid AND in_array($this->extConf['manage_group'],$usergroups)){
 			$list .= '<li>'.$this->pi_linkToPage($this->pi_getLL('newRaid'),$this->newPid).'</li>';
 		}
