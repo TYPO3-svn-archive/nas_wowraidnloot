@@ -223,7 +223,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 				
 		$where = '1=1 ';
 		if ($type == 'leader'){
-			$where .= ' AND (leader=\''.$userId.'\' OR leader=\''.$userId.',%\' OR leader=\'%,'.$userId.',%\' OR leader=\''.$userId.',%\')';
+			$where .= ' AND (leader=\''.$userId.'\' OR leader LIKE \''.$userId.',%\' OR leader LIKE \'%,'.$userId.',%\' OR leader LIKE \''.$userId.',%\')';
 		} elseif ($type == 'all'){
 			$where .= ' AND open=1';
 		}
