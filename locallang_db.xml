@@ -27,6 +27,11 @@
 			<label index="tx_naswowraidnloot_collected.itemname">item name</label>
 			<label index="tx_naswowraidnloot_collected.lootdate">loot date</label>
 			<label index="tx_naswowraidnloot_collected.charid">char id</label>
+			<label index="tx_naswowraidnloot_collected.raidid">raid id</label>
+			<label index="tx_naswowraidnloot_collected.loottype">loot type</label>
+			<label index="tx_naswowraidnloot_collected.loottype.I">main equip</label>
+			<label index="tx_naswowraidnloot_collected.loottype.II">off equip</label>
+			<label index="tx_naswowraidnloot_collected.loottype.III">disenchant</label>
 			<label index="tx_naswowraidnloot_raid">Raid</label>
 			<label index="tx_naswowraidnloot_raid.title">title</label>
 			<label index="tx_naswowraidnloot_raid.open">show all</label>
@@ -64,6 +69,11 @@
 			<label index="tx_naswowraidnloot_collected.itemname">Gegenstand Name</label>
 			<label index="tx_naswowraidnloot_collected.lootdate">Loot Datum</label>
 			<label index="tx_naswowraidnloot_collected.charid">Char ID</label>
+			<label index="tx_naswowraidnloot_collected.raidid">Raid id</label>
+			<label index="tx_naswowraidnloot_collected.loottype">Loot Typ</label>
+			<label index="tx_naswowraidnloot_collected.loottype.I">Main Equip</label>
+			<label index="tx_naswowraidnloot_collected.loottype.II">Off Equip</label>
+			<label index="tx_naswowraidnloot_collected.loottype.III">Entzaubern</label>
 			<label index="tx_naswowraidnloot_raid">raid</label>
 			<label index="tx_naswowraidnloot_raid.open">für alle Sichtbar</label>
 			<label index="tx_naswowraidnloot_raid.title">Titel</label>

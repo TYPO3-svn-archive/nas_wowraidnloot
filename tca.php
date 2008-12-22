@@ -300,9 +300,24 @@ $TCA["tx_naswowraidnloot_collected"] = array (
 				"maxitems" => 1,
 			)
 		),
+		"loottype" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:nas_wowraidnloot/locallang_db.xml:tx_naswowraidnloot_collected.loottype",		
+			"config" => Array (
+				"type" => "select",
+				"size" => "1",	
+				"minitems" => "1",
+				"maxtems" => "1",
+				"items" => Array(
+						Array("LLL:EXT:nas_wowraidnloot/locallang_db.xml:tx_naswowraidnloot_collected.loottype.I",0),
+						Array("LLL:EXT:nas_wowraidnloot/locallang_db.xml:tx_naswowraidnloot_collected.loottype.II",1),
+						Array("LLL:EXT:nas_wowraidnloot/locallang_db.xml:tx_naswowraidnloot_collected.loottype.III",2),
+				)
+			)
+		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, itemid, itemname, lootdate, charid, raidid")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, itemid, itemname, lootdate, charid, raidid,loottype")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
@@ -434,9 +449,9 @@ $TCA["tx_naswowraidnloot_raid"] = array (
 				"type" => "group",	
 				"internal_type" => "db",	
 				"allowed" => "fe_users",
-				"size" => 1,
+				"size" => 5,
 				"minitems" => 0,
-				"maxitems" => 1,
+				"maxitems" => 10,
 			)
 		),
 	),

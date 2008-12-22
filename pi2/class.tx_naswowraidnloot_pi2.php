@@ -59,7 +59,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 
 		$content = '';
 		//t3lib_div::devLog('piVars', $this->extKey, 0, $this->piVars);
-		t3lib_div::devLog('extConf', $this->extKey, 0, $this->extConf);
+		//t3lib_div::devLog('extConf', $this->extKey, 0, $this->extConf);
 		
 		//make the date2cal instance
         if (t3lib_extMgm::isLoaded('date2cal')) {
@@ -181,6 +181,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		$saveValues['raidid'] = $raidId;
 		$saveValues['itemid'] = $itemId;
 		$saveValues['charid'] = $charId;
+		$saveValues['loottype'] = $this->piVars['loottype'];
 		$saveValues['pid'] = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'storagePid','sDEF');
 		
 		$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_naswowraidnloot_collected',$saveValues);
@@ -205,7 +206,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		if ($this->myPid){
 			$list .= '<li>'.$this->pi_linkToPage($this->pi_getLL('myRaids'),$this->myPid).'</li>';
 		}
-		if ($this->leadPid){
+		if ($this->leadPid AND in_array($this->extConf['manage_group'],$usergroups)){
 			$list .= '<li>'.$this->pi_linkToPage($this->pi_getLL('myLeads'),$this->leadPid).'</li>';
 		}
 		
@@ -430,6 +431,9 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 			// Member Select
 			$markerArray['###MEMBER###'] = $this->pi_getLL('member');
 			$markerArray['###MEMBER_SELECT###'] = $this->getMemberSelect($raidId,'single');
+			// Loot Type
+			$markerArray['###LOOTTYPE###'] = $this->pi_getLL('loottype');
+			$markerArray['###LOOTTYPE_SELECT###'] = $this->getLootTypeSelect();
 			
 			// save Button
 			$markerArray['###SAVE_LOOT###'] = $this->pi_getLL('save_loot');
@@ -523,6 +527,20 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		}
 		
 		return $info;
+	}
+	
+	function getLootTypeSelect() {
+		$content = '';
+		
+		$select .= '<option value="0">'.$this->pi_getLL('loottype_0').'</option>';
+		$select .= '<option value="1">'.$this->pi_getLL('loottype_1').'</option>';
+		$select .= '<option value="2">'.$this->pi_getLL('loottype_2').'</option>';
+		
+		if ($select != ''){
+			$content .= '<select id="'.$this->prefixId.'[loottype]" name="'.$this->prefixId.'[loottype]">'.$select.'</select>';
+		}
+
+		return $content;
 	}
 	
 	function getBossSelect($destinationId){
