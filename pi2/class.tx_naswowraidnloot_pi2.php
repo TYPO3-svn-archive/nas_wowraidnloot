@@ -104,8 +104,8 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 						}
 					break;
 				case 'RAID-NEW': if ($this->piVars['save_new_raid']){
-									$content .= $this->saveRaid('new',$userId);
-									$content .= $this->getEditForm($userId, $raidId);
+									$raidId = $this->saveRaid('new',$userId);
+									$content .= $this->getEditForm($userId,$raidId);
 									$content .= $this->getEditLootForm($raidId);
 									$content .= $this->getShowLoot($raidId);
 								} else {
@@ -114,7 +114,8 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 					break;
 				case 'RAID-EDIT': if ($this->piVars['save_edit_raid']){
 									$content .= $this->saveRaid('edit',$userId,$raidId);
-								}$content .= $this->getEditForm($userId,$raidId);
+								}
+								$content .= $this->getEditForm($userId,$raidId);
 								if($this->piVars['save_loot']) {
 									$content .= $this->saveLoot($raidId);
 								}
@@ -154,7 +155,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		if ($saveType == 'new'){
 			$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_naswowraidnloot_raid',$saveValues);
 			$raidId = $GLOBALS['TYPO3_DB']->sql_insert_id();
-			$content .= '<span class="save_message">'.$this->pi_getLL('newRaid_saved').'</span>';
+			$content = $raidId;
 		} else {
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_naswowraidnloot_raid','uid='.$raidId,$saveValues);
 			$content .= '<span class="save_message">'.$this->pi_getLL('raid_saved').'</span>';
