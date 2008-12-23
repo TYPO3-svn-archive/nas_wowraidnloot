@@ -24,6 +24,7 @@
 			<label index="tx_naswowraidnloot_chars.player">player</label>
 			<label index="tx_naswowraidnloot_collected">Collected</label>
 			<label index="tx_naswowraidnloot_collected.itemid">item id</label>
+			<label index="tx_naswowraidnloot_collected.bossid">boss id</label>
 			<label index="tx_naswowraidnloot_collected.itemname">item name</label>
 			<label index="tx_naswowraidnloot_collected.lootdate">loot date</label>
 			<label index="tx_naswowraidnloot_collected.charid">char id</label>
@@ -66,6 +67,7 @@
 			<label index="tx_naswowraidnloot_chars.player">Spieler</label>
 			<label index="tx_naswowraidnloot_collected">Gesammelt</label>
 			<label index="tx_naswowraidnloot_collected.itemid">Gegenstand ID</label>
+			<label index="tx_naswowraidnloot_collected.bossid">Boss ID</label>
 			<label index="tx_naswowraidnloot_collected.itemname">Gegenstand Name</label>
 			<label index="tx_naswowraidnloot_collected.lootdate">Loot Datum</label>
 			<label index="tx_naswowraidnloot_collected.charid">Char ID</label>

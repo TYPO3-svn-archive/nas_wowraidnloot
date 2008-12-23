@@ -58,8 +58,8 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		$this->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['nas_wowraidnloot']);
 
 		$content = '';
-		//t3lib_div::devLog('piVars', $this->extKey, 0, $this->piVars);
-		t3lib_div::devLog('extConf', $this->extKey, 0, $this->extConf);
+		t3lib_div::devLog('piVars', $this->extKey, 0, $this->piVars);
+		//t3lib_div::devLog('extConf', $this->extKey, 0, $this->extConf);
 		
 		//make the date2cal instance
         if (t3lib_extMgm::isLoaded('date2cal')) {
@@ -85,7 +85,6 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		$userId = $GLOBALS['TSFE']->fe_user->user['uid'];
 		$raidId = $this->piVars['raid_id'];
 		$charId = $this->piVars['member'];
-		$itemId = $this->piVars['items'];
 		
 		foreach($this->types as $nr => $type){
 			switch ($type){
@@ -117,7 +116,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 									$content .= $this->saveRaid('edit',$userId,$raidId);
 								}$content .= $this->getEditForm($userId,$raidId);
 								if($this->piVars['save_loot']) {
-									$content .= $this->saveLoot($raidId,$itemId,$charId);
+									$content .= $this->saveLoot($raidId);
 								}
 								$content .= $this->getEditLootForm($raidId);
 								$content .= $this->getShowLoot($raidId);
@@ -174,16 +173,18 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		return $content;
 	}
 	
-	function saveLoot($raidId, $itemId, $charId){
+	function saveLoot($raidId){
 		$content = '';
 		
 		$saveValues = array();
 		$saveValues['raidid'] = $raidId;
-		$saveValues['itemid'] = $itemId;
-		$saveValues['charid'] = $charId;
+		$saveValues['itemid'] = $this->piVars['items'];
+		$saveValues['bossid'] = $this->piVars['boss'];
+		$saveValues['charid'] = $this->piVars['item_member'];
 		$saveValues['loottype'] = $this->piVars['loottype'];
 		$saveValues['pid'] = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'storagePid','sDEF');
-		
+		t3lib_div::devLog('saveValues', $this->extKey, 0, $saveValues);
+				
 		$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_naswowraidnloot_collected',$saveValues);
 		$content .= '<span class="save_message">'.$this->pi_getLL('loot_saved').'</span>';
 
@@ -195,7 +196,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		$list = '';
 		
 		$usergroups = explode(',',$GLOBALS['TSFE']->fe_user->user['usergroup']);
-		t3lib_div::devLog('usergroups', $this->extKey, 0, $usergroups);
+		//t3lib_div::devLog('usergroups', $this->extKey, 0, $usergroups);
 		if ($this->backPid){
 			$list .= '<li>'.$this->pi_linkToPage($this->pi_getLL('back'),$this->backPid).'</li>';
 		}
@@ -427,7 +428,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 			$markerArray['###BOSS_SELECT###'] = $this->getBossSelect($row['destinationid']);
 			// Item Select
 			$markerArray['###ITEM###'] = $this->pi_getLL('item'); 
-			$markerArray['###ITEM_SELECT###'] = '<select id="'.$this->prefixId.'[items]" name="'.$this->prefixId.'[items]"><option value="0">---</option></select>';
+			$markerArray['###ITEM_SELECT###'] = '<span id="loot_item"><select id="'.$this->prefixId.'[items]" name="'.$this->prefixId.'[items]"><option value="0">---</option></select></span>';
 			// Member Select
 			$markerArray['###MEMBER###'] = $this->pi_getLL('member');
 			$markerArray['###MEMBER_SELECT###'] = $this->getMemberSelect($raidId,'single');
@@ -460,6 +461,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 			$temp_markerArray['###MEMBER###'] = $this->pi_getLL('member');	
 			$temp_markerArray['###ITEM###'] = $this->pi_getLL('item');
 			$temp_markerArray['###BOSS###'] = $this->pi_getLL('boss');
+			$temp_markerArray['###LOOTTYPE###'] = $this->pi_getLL('loottype');
 			$lines .= $this->renderContent('###SHOW_LOOT_LINE_RAID_TOP###',$temp_markerArray);
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
 				$temp_markerArray = array();
@@ -481,6 +483,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 				if ($temp_markerArray['###BOSS###'] == '') {
 					$temp_markerArray['###BOSS###'] = '<span class="error">'.$this->pi_getLL('armory_notFound').'</span>';
 				}
+				$temp_markerArray['###LOOTTYPE###'] = $this->pi_getLL('loottype_'.$row['loottype']);
 				if ($type == 'raid'){
 					$lines .= $this->renderContent('###SHOW_LOOT_LINE_RAID###',$temp_markerArray);
 				}
@@ -586,7 +589,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		}
 		//t3lib_div::devLog('getBossSelect bossis', $this->extKey, 0, $bossis);
 		if ($select != ''){
-			$content .= '<select onchange="nas_wowraidnloot_setItems('.$destinationId.',document.getElementById(\'tx_naswowraidnloot_pi2[boss]\').value);" id="'.$this->prefixId.'[boss]" name="'.$this->prefixId.'[boss]">'.$select.'</select>';
+			$content .= '<select onchange="nas_wowraidnloot_setItems('.$destinationId.',this.value);" id="'.$this->prefixId.'[boss]" name="'.$this->prefixId.'[boss]">'.$select.'</select>';
 		}
 		
 		return $content;
@@ -626,13 +629,13 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		
 		if ($select_get != ''){
 			if ($type == 'more'){
-				$content .= '<select multiple="multiple" size="10" id="'.$this->prefixId.'[member]" name="'.$this->prefixId.'[member]">'.$select_set.'</select>';
+				$content .= '<span id="set_member"><select size="10" id="'.$this->prefixId.'[member]" name="'.$this->prefixId.'[member]">'.$select_set.'</select></span>';
 				$content .= '<a onclick="nas_wowraidnloot_unSetMember(document.getElementById(\'tx_naswowraidnloot_pi2[member]\').value,document.getElementById(\'tx_naswowraidnloot_pi2[h_member]\').value);" href="#"><img height="14" width="14" border="0" title="Remove selected items" alt="Remove selected items" src="typo3/sysext/t3skin/icons/gfx/group_clear.gif"/></a>';
 				$content .= '<select size="10" id="'.$this->prefixId.'[member_get]" name="'.$this->prefixId.'[member_get]" onclick="nas_wowraidnloot_setMember(document.getElementById(\'tx_naswowraidnloot_pi2[member_get]\').value,document.getElementById(\'tx_naswowraidnloot_pi2[member]\').innerHTML,document.getElementById(\'tx_naswowraidnloot_pi2[h_member]\').value);">'.$select_get.'</select>';
 				$content .= '<input type="hidden" id="'.$this->prefixId.'[h_member]" name="'.$this->prefixId.'[h_member]" value="'.$hline.'" />';	
 			} elseif ($type == 'single') {
 				$select_set = '<option value="0">---</option>'.$select_set;
-				$content .= '<select size="1" id="'.$this->prefixId.'[member]" name="'.$this->prefixId.'[member]" >'.$select_set.'</select>';
+				$content .= '<select size="1" id="'.$this->prefixId.'[item_member]" name="'.$this->prefixId.'[item_member]" >'.$select_set.'</select>';
 			}
 		}
 
@@ -737,9 +740,11 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 			}
 		}
 		
+		$content = '<select size="10" id="'.$this->prefixId.'[member]" name="'.$this->prefixId.'[member]">'.$line.'</select>';
+		
 		//t3lib_div::devLog('setMember line', $this->extKey, 0, $selected);
 		
-	  	$objResponse->addAssign($this->prefixId."[member]","innerHTML", $line);
+	  	$objResponse->addAssign("set_member","innerHTML", $content);
 	  	$objResponse->addAssign($this->prefixId."[h_member]","value", $hline);
 
 		//return the  xajaxResponse object
@@ -768,7 +773,9 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		  	}
 		  	$all = implode(',',$all_array);
 		  	
-		  	$objResponse->addAssign("tx_naswowraidnloot_pi2[member]","innerHTML", $line);
+		  	$content = '<select size="10" id="'.$this->prefixId.'[member]" name="'.$this->prefixId.'[member]">'.$line.'</select>';
+		  	
+		  	$objResponse->addAssign("set_member","innerHTML", $content);
 	  		$objResponse->addAssign($this->prefixId."[h_member]","value", $all);
 	  	}
 	  	//t3lib_div::devLog('unSetMember all 2', $this->extKey, 0, $all);
@@ -815,12 +822,13 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		
 		$select .= '<option value="0">---</option>';
 		foreach ($items as $name => $item){
-			$select .= '<option value="'.$item['id'].'" ';
-			$select .= '>'.$item['name'].'</option>';
+			$select .= '<option value="'.$item['id'].'">'.$item['name'].'</option>';
 		}
 		
-		$objResponse->addAssign("tx_naswowraidnloot_pi2[items]","innerHTML", $select);
-	  	
+		$content = '<select id="'.$this->prefixId.'[items]" name="'.$this->prefixId.'[items]">'.$select.'</select>';
+				
+		$objResponse->addAssign("loot_item","innerHTML", $content);
+		
 	  	return $objResponse->getXML();	
 	}
 	

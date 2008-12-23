@@ -79,7 +79,8 @@ CREATE TABLE tx_naswowraidnloot_collected (
 	lootdate int(11) DEFAULT '0' NOT NULL,
 	charid blob NOT NULL,
 	raidid blob NOT NULL,
-	loottype int NOT NULL,
+	loottype int(11) DEFAULT '0' NOT NULL,
+	bossid int(11) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

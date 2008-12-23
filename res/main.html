@@ -19,7 +19,7 @@
 
 <!-- ###NEW_RAID### begin -->
 ###DATE2CAL_JS###
-<form id="new_raid_form" name="new_raid_form" method="post" target="_top" action="###FORM_ACTION###">
+<form id="raid_form" name="raid_form" method="post" target="_top" action="###FORM_ACTION###">
 	<div id="title"><label for="###PI###[title]">###TITLE###</label><input type="text" id="###PI###[title]" name="###PI###[title]" /></div>
 	<div id="open"><label for="###PI###[open]">###OPEN###</label><input type="checkbox" id="###PI###[open]" name="###PI###[open]" checked/></div>
 	<div id="dest"><label for="###PI###[destinationid]">###DESTINATION###</label>###DESTINATION_SELECT###</div>
@@ -32,7 +32,7 @@
 
 <!-- ###EDIT_RAID### begin -->
 ###DATE2CAL_JS###
-<form id="edit_raid_form" name="edit_raid_form" method="post" target="_top" action="###FORM_ACTION###">
+<form id="raid_form" name="raid_form" method="post" target="_top" action="###FORM_ACTION###">
 	<div id="title"><label for="###PI###[title]">###TITLE###</label><input type="text" id="###PI###[title]" name="###PI###[title]" value="###RAID_TITLE###" /></div>
 	<div id="leader"><label for="###PI###[leader]">###LEADER###</label><select size="5" multiple id="###PI###[leader]" name="###PI###[leader]">###LEADER_OPTIONS###</select></div>
 	<div id="open"><label for="###PI###[open]">###OPEN###</label><input type="checkbox" id="###PI###[open]" name="###PI###[open]" ###OPEN_CHECKED###/></div>
@@ -64,17 +64,20 @@
 <div class="member"><b>###MEMBER###</b></div>
 <div class="boss"><b>###BOSS###</b></div>
 <div class="item"><b>###ITEM###</b></div>
+<div class="loottype"><b>###LOOTTYPE###</b></div>
 <div style="clear:both;"></div>
 <!-- ###SHOW_LOOT_LINE_RAID_TOP### end -->
 <!-- ###SHOW_LOOT_LINE_RAID### begin -->
 <div class="member">###MEMBER###</div>
 <div class="boss">###BOSS###</div>
 <div class="item">###ITEM###</div>
+<div class="loottype">###LOOTTYPE###</div>
 <div style="clear:both;"></div>
 <!-- ###SHOW_LOOT_LINE_RAID### end -->
 <!-- ###SHOW_LOOT_LINE_CHAR### begin -->
 <div class="item">###ITEM###</div>
 <div class="raid">###RAID###</div>
 <div class="boss">###BOSS###</div>
+<div class="loottype">###LOOTTYPE###</div>
 <div style="clear:both;"></div>
 <!-- ###SHOW_LOOT_LINE_CHAR### end -->

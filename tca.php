@@ -180,8 +180,8 @@ $TCA["tx_naswowraidnloot_chars"] = array (
 				"eval"     => "int",
 				"checkbox" => "0",
 				"range"    => Array (
-					"upper" => "1000",
-					"lower" => "10"
+					"upper" => "100000",
+					"lower" => "0"
 				),
 				"default" => 0
 			)
@@ -197,7 +197,7 @@ $TCA["tx_naswowraidnloot_chars"] = array (
 				"checkbox" => "0",
 				"range"    => Array (
 					"upper" => "1000",
-					"lower" => "10"
+					"lower" => "0"
 				),
 				"default" => 0
 			)
@@ -250,8 +250,24 @@ $TCA["tx_naswowraidnloot_collected"] = array (
 				"eval"     => "int",
 				"checkbox" => "0",
 				"range"    => Array (
-					"upper" => "1000",
-					"lower" => "10"
+					"upper" => "100000",
+					"lower" => "0"
+				),
+				"default" => 0
+			)
+		),
+		"bossid" => Array (		
+			"exclude" => 1,		
+			"label" => "LLL:EXT:nas_wowraidnloot/locallang_db.xml:tx_naswowraidnloot_collected.bossid",		
+			"config" => Array (
+				"type"     => "input",
+				"size"     => "4",
+				"max"      => "4",
+				"eval"     => "int",
+				"checkbox" => "0",
+				"range"    => Array (
+					"upper" => "100000",
+					"lower" => "0"
 				),
 				"default" => 0
 			)
