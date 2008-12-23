@@ -58,7 +58,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		$this->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['nas_wowraidnloot']);
 
 		$content = '';
-		t3lib_div::devLog('piVars', $this->extKey, 0, $this->piVars);
+		//t3lib_div::devLog('piVars', $this->extKey, 0, $this->piVars);
 		//t3lib_div::devLog('extConf', $this->extKey, 0, $this->extConf);
 		
 		//make the date2cal instance
@@ -137,7 +137,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 			$saveValues['leader'] = $userId;
 		} else {
 			$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_naswowraidnloot_raid_member_mm','uid_local='.$raidId);
-			$saveValues['leader'] = $this->piVars['leader'];
+			$saveValues['leader'] = implode(',',$this->piVars['leader']);
 		}
 		$saveValues['title'] = $this->piVars['title'];
 		if ($this->piVars['open'] == 'on'){
@@ -183,7 +183,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		$saveValues['charid'] = $this->piVars['item_member'];
 		$saveValues['loottype'] = $this->piVars['loottype'];
 		$saveValues['pid'] = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'storagePid','sDEF');
-		t3lib_div::devLog('saveValues', $this->extKey, 0, $saveValues);
+		//t3lib_div::devLog('saveValues', $this->extKey, 0, $saveValues);
 				
 		$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_naswowraidnloot_collected',$saveValues);
 		$content .= '<span class="save_message">'.$this->pi_getLL('loot_saved').'</span>';
@@ -229,7 +229,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 			$where .= ' AND open=1';
 		}
 		$where .= $this->cObj->enableFields('tx_naswowraidnloot_raid');
-		t3lib_div::devLog('where', $this->extKey, 0, $where);
+		//t3lib_div::devLog('where', $this->extKey, 0, $where);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_raid',$where);
 		//t3lib_div::devLog('setMember', $this->extKey, 0, $GLOBALS['TYPO3_DB']->SELECTquery('*','tx_naswowraidnloot_raid',$where));
 		if ($res) {
