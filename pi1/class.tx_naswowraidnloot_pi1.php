@@ -182,53 +182,55 @@ class tx_naswowraidnloot_pi1 extends tslib_pibase {
 					$temp_markerArray = array();
 					setlocale(LC_ALL,'de_DE.utf8');
 					
-					$markerArray['###RAID_TITLE###'] = $row['title'];
-					$markerArray['###RAID_START###'] = strftime("%A, %e. %b. %Y",$row['start']);
-					if ($row['end'] != 0) {
-						$markerArray['###RAID_END###'] = strftime("%A, %e. %b. %Y",$row['end']);	
-					} else {
-						$markerArray['###RAID_END###'] = '';
-					}
-					
-					$res_loot = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_collected','charid='.$charId.' AND raidid='.$row['uid'].$this->cObj->enableFields('tx_naswowraidnloot_collected'));
-					if ($res_loot){
-						$lines = '';
-						$temp_markerArray['###ITEM###'] = $this->pi_getLL('item');
-						$temp_markerArray['###BOSS###'] = $this->pi_getLL('boss');
-						$temp_markerArray['###LOOTTYPE###'] = $this->pi_getLL('loottype');
-						$lines_top = $this->renderContent('###SHOW_LOOT_LINE_CHAR_TOP###',$temp_markerArray);
-						while ($row_loot = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res_loot)){
-							$temp_markerArray = array();
-							$item_info = $this->getArmoryItem($row_loot['itemid']);
-							//t3lib_div::devLog('getArmoryItem', $this->extKey, 0, $item_info);
-							$temp_markerArray['###ITEM###'] = '<a target="_blank" href="http://eu.wowarmory.com/item-info.xml?i='.$row_loot['itemid'].'">'.$item_info['item']['name'].'</a>';
-							if ($temp_markerArray['###ITEM###'] == '') {
-								$temp_markerArray['###ITEM###'] = '<span class="error">'.$this->pi_getLL('armory_notFound').'</span>';
-							}
-							$temp_markerArray['###BOSS###'] = $item_info['drop']['name'];
-							if ($row['bossid'] > 0) {
-								$boss_info = array();
-								$boss_info = $this->getArmoryBoss($row_loot['bossid']);
-								//t3lib_div::devLog('getArmoryBoss', $this->extKey, 0, $boss_info);
-								$temp_markerArray['###BOSS###'] = $boss_info['filter']['creatureName'];
-							}				
-							if ($temp_markerArray['###BOSS###'] == '') {
-								$temp_markerArray['###BOSS###'] = '<span class="error">'.$this->pi_getLL('armory_notFound').'</span>';
-							}
-							$temp_markerArray['###LOOTTYPE###'] = $this->pi_getLL('loottype_'.$row_loot['loottype']);
-							$lines .= $this->renderContent('###SHOW_LOOT_LINE_CHAR###',$temp_markerArray);
+					if (is_array($row)){
+						$markerArray['###RAID_TITLE###'] = $row['title'];
+						$markerArray['###RAID_START###'] = strftime("%A, %e. %b. %Y",$row['start']);
+						if ($row['end'] != 0) {
+							$markerArray['###RAID_END###'] = strftime("%A, %e. %b. %Y",$row['end']);	
+						} else {
+							$markerArray['###RAID_END###'] = '';
 						}
-						if ($lines != ''){
-							$markerArray['###LOOT_LINES###'] = $lines_top .$lines;
+						
+						$res_loot = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_collected','charid='.$charId.' AND raidid='.$row['uid'].$this->cObj->enableFields('tx_naswowraidnloot_collected'));
+						if ($res_loot){
+							$lines = '';
+							$temp_markerArray['###ITEM###'] = $this->pi_getLL('item');
+							$temp_markerArray['###BOSS###'] = $this->pi_getLL('boss');
+							$temp_markerArray['###LOOTTYPE###'] = $this->pi_getLL('loottype');
+							$lines_top = $this->renderContent('###SHOW_LOOT_LINE_CHAR_TOP###',$temp_markerArray);
+							while ($row_loot = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res_loot)){
+								$temp_markerArray = array();
+								$item_info = $this->getArmoryItem($row_loot['itemid']);
+								//t3lib_div::devLog('getArmoryItem', $this->extKey, 0, $item_info);
+								$temp_markerArray['###ITEM###'] = '<a target="_blank" href="http://eu.wowarmory.com/item-info.xml?i='.$row_loot['itemid'].'">'.$item_info['item']['name'].'</a>';
+								if ($temp_markerArray['###ITEM###'] == '') {
+									$temp_markerArray['###ITEM###'] = '<span class="error">'.$this->pi_getLL('armory_notFound').'</span>';
+								}
+								$temp_markerArray['###BOSS###'] = $item_info['drop']['name'];
+								if ($row['bossid'] > 0) {
+									$boss_info = array();
+									$boss_info = $this->getArmoryBoss($row_loot['bossid']);
+									//t3lib_div::devLog('getArmoryBoss', $this->extKey, 0, $boss_info);
+									$temp_markerArray['###BOSS###'] = $boss_info['filter']['creatureName'];
+								}				
+								if ($temp_markerArray['###BOSS###'] == '') {
+									$temp_markerArray['###BOSS###'] = '<span class="error">'.$this->pi_getLL('armory_notFound').'</span>';
+								}
+								$temp_markerArray['###LOOTTYPE###'] = $this->pi_getLL('loottype_'.$row_loot['loottype']);
+								$lines .= $this->renderContent('###SHOW_LOOT_LINE_CHAR###',$temp_markerArray);
+							}
+							if ($lines != ''){
+								$markerArray['###LOOT_LINES###'] = $lines_top .$lines;
+							} else {
+								$markerArray['###LOOT_LINES###'] = $this->pi_getLL('no_loot');
+							}
 						} else {
 							$markerArray['###LOOT_LINES###'] = $this->pi_getLL('no_loot');
 						}
-					} else {
-						$markerArray['###LOOT_LINES###'] = $this->pi_getLL('no_loot');
+									
+						//t3lib_div::devLog('temp markerArray', $this->extKey, 0, $temp_markerArray);
+						$content .= $this->renderContent('###CHAR_RAIDLIST###',$markerArray);
 					}
-					
-					//t3lib_div::devLog('temp markerArray', $this->extKey, 0, $temp_markerArray);
-					$content .= $this->renderContent('###CHAR_RAIDLIST###',$markerArray);
 				}
 			}
 		}
