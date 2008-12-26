@@ -174,7 +174,8 @@ class tx_naswowraidnloot_pi1 extends tslib_pibase {
 		$res_mm = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_raid_member_mm','uid_foreign='.$charId);
 		if ($res_mm){
 			while ($row_mm = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res_mm)){
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_raid','hidden=0 and deleted=0 and uid='.$row_mm['uid_local'].$this->cObj->enableFields('tx_naswowraidnloot_raid'));
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_raid','uid='.$row_mm['uid_local'].$this->cObj->enableFields('tx_naswowraidnloot_raid'));
+				t3lib_div::devLog('temp markerArray', $this->extKey, 0, $GLOBALS['TYPO3_DB']->SELECTquery('*','tx_naswowraidnloot_raid','uid='.$row_mm['uid_local'].$this->cObj->enableFields('tx_naswowraidnloot_raid')));
 				if ($res) {
 					$markerArray = array();
 					$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
