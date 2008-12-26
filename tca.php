@@ -228,7 +228,7 @@ $TCA["tx_naswowraidnloot_chars"] = array (
 $TCA["tx_naswowraidnloot_collected"] = array (
 	"ctrl" => $TCA["tx_naswowraidnloot_collected"]["ctrl"],
 	"interface" => array (
-		"showRecordFieldList" => "hidden,itemid,itemname,lootdate,charid,raidid"
+		"showRecordFieldList" => "hidden,itemid,bossid,itemname,lootdate,charid,raidid"
 	),
 	"feInterface" => $TCA["tx_naswowraidnloot_collected"]["feInterface"],
 	"columns" => array (
@@ -333,7 +333,7 @@ $TCA["tx_naswowraidnloot_collected"] = array (
 		),
 	),
 	"types" => array (
-		"0" => array("showitem" => "hidden;;1;;1-1-1, itemid, itemname, lootdate, charid, raidid,loottype")
+		"0" => array("showitem" => "hidden;;1;;1-1-1, itemid, bossid, itemname, lootdate, charid, raidid,loottype")
 	),
 	"palettes" => array (
 		"1" => array("showitem" => "")
