@@ -29,6 +29,7 @@
 			<label index="leader">Raidleitung</label>
 			<label index="boss">Boss</label>
 			<label index="item">Gegenstand</label>
+			<label index="loot">Loot im Raid</label>
 			
 			<label index="loottype">Loot-Typ</label>
 			<label index="loottype_0">Main Equip</label>

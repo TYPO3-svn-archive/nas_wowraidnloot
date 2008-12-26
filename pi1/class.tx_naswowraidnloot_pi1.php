@@ -88,7 +88,7 @@ class tx_naswowraidnloot_pi1 extends tslib_pibase {
 		}
 		$where .= $this->cObj->enableFields('tx_naswowraidnloot_chars');
 		
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_chars',$where);
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_chars',$where,'','name ASC');
 		if ($res) {
 			$content .= '<ul>';
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){

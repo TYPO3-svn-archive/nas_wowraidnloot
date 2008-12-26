@@ -17,6 +17,18 @@
 </div>
 <!-- ###CHAR_SHEET### end -->
 
+<!-- ###SHOW_RAID### begin -->
+<div id="show_raid">
+	<div class="title">###TITLE###</div>
+	<div class="dest">###DESTINATION###</div>
+	<div class="start">###START###</div>
+	<div class="end">###END###</div>
+	<div class="member"><b>###MEMBER_TITLE###:</b><br />###MEMBER###</div>
+</div>
+<hr />
+<b>###LOOT###</b>
+<!-- ###SHOW_RAID### end -->
+
 <!-- ###NEW_RAID### begin -->
 ###DATE2CAL_JS###
 <form id="raid_form" name="raid_form" method="post" target="_top" action="###FORM_ACTION###">
@@ -52,10 +64,21 @@
 	<div id="items">###ITEM###<br>###ITEM_SELECT###</div>
 	<div id="member">###MEMBER###<br>###MEMBER_SELECT###</div>
 	<div id="loottype">###LOOTTYPE###<br>###LOOTTYPE_SELECT###</div>
-	<div id="save"><br /><input type="submit" name="###PI###[save_loot]" value="###SAVE_LOOT###" /></div>
+	<div id="save"><br /><input type="submit" name="###PI###[###SAVE_TYPE###]" value="###SAVE_LOOT###" /></div>
 </form>
 <hr />
 <!-- ###EDIT_LOOT### end -->
+
+<!-- ###EDIT_RANDOMLOOT### begin -->
+<form id="edit_loot_form" name="edit_randomloot_form" method="post" target="_top" action="###FORM_ACTION###">
+	<div id="lootInfo">###LOOT_INFO###</div>
+	<div id="items">###ITEM###<br>###ITEM_INPUT###</div>
+	<div id="member">###MEMBER###<br>###MEMBER_SELECT###</div>
+	<div id="loottype">###LOOTTYPE###<br>###LOOTTYPE_SELECT###</div>
+	<div id="save"><br /><input type="submit" name="###PI###[###SAVE_TYPE###]" value="###SAVE_LOOT###" /></div>
+</form>
+<hr />
+<!-- ###EDIT_RANDOMLOOT### end -->
 
 <!-- ###SHOW_LOOT### begin -->
 <div id="show_loot">###LINES###</div>

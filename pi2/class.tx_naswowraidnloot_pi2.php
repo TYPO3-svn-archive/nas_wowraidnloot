@@ -99,6 +99,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 				case 'RAID-SINGLE': 
 						if ($raidId != 0){
 							$content .= $this->getRaid($raidId);
+							$content .= $this->getShowLoot($raidId);
 						} else {
 							$content .= $this->pi_getLL('noRaidSelected');
 						}
@@ -107,6 +108,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 									$raidId = $this->saveRaid('new',$userId);
 									$content .= $this->getEditForm($userId,$raidId);
 									$content .= $this->getEditLootForm($raidId);
+									$content .= $this->getRandomLootForm($raidId);
 									$content .= $this->getShowLoot($raidId);
 								} else {
 									$content .= $this->getNewForm($userId);
@@ -118,8 +120,11 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 								$content .= $this->getEditForm($userId,$raidId);
 								if($this->piVars['save_loot']) {
 									$content .= $this->saveLoot($raidId);
+								} else if($this->piVars['save_random']){
+									$content .= $this->saveRandomLoot($raidId);
 								}
 								$content .= $this->getEditLootForm($raidId);
+								$content .= $this->getRandomLootForm($raidId);
 								$content .= $this->getShowLoot($raidId);
 					break;
 			}
@@ -192,6 +197,57 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		return $content;
 	}
 	
+	function saveRandomLoot($raidId){
+		$content = '';
+		
+		$itemName = $this->piVars['random_name'];
+		$searchName = str_replace(' ','%20',$itemName);
+		$useragent = "Mozilla/5.0 (Windows; U; Windows NT 5.0; de-DE; rv:1.6)Gecko/20040206 Firefox/1.0.1"; 
+		ini_set('user_agent',$useragent); 
+		header('Content-Type: text/html; charset=utf-8');
+		$header[] = "Accept-Language: de-de,de;q=0.5"; 
+		# URL vorbereiten
+		$URL = "http://eu.wowarmory.com/search.xml?searchQuery=".$searchName.'&searchType=all';
+		//t3lib_div::devLog('URL', $this->extKey, 0, $URL);
+ 		# CURL initialisieren und XML-Datei laden
+		$curl = curl_init();
+		 
+		curl_setopt ($curl, CURLOPT_URL, $URL);
+		curl_setopt($curl, CURLOPT_USERAGENT, $useragent);
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+ 
+		$load = curl_exec($curl);
+		curl_close($curl);
+		
+		# eingelesenen String zu SimpleXMLElement umformen
+		//t3lib_div::devLog('load', $this->extKey, 0, $load);
+		$xml = new SimpleXMLElement($load);
+		$item = array();
+		foreach($xml->armorySearch->searchResults->items->item as $searchItem) {
+			foreach($searchItem->attributes() as $a => $b) {
+					$item[$a] = (string)$b;
+				}
+		}
+		//t3lib_div::devLog('item', $this->extKey, 0, $item);
+		$itemId = intval($item['id']);
+		
+		$saveValues = array();
+		$saveValues['raidid'] = $raidId;
+		$saveValues['itemid'] = $itemId;
+		$saveValues['itemname'] = $itemName;
+		$saveValues['bossid'] = 0;
+		$saveValues['charid'] = $this->piVars['item_member'];
+		$saveValues['loottype'] = $this->piVars['loottype'];
+		$saveValues['pid'] = $this->pi_getFFvalue($this->cObj->data['pi_flexform'],'storagePid','sDEF');
+		//t3lib_div::devLog('saveValues', $this->extKey, 0, $saveValues);
+				
+		$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_naswowraidnloot_collected',$saveValues);
+		$content .= '<span class="save_message">'.$this->pi_getLL('loot_saved').'</span>';
+
+		return $content;
+	}
+	
 	function getMenu($userId = 0){
 		$content = '<p>';
 		$list = '';
@@ -231,7 +287,8 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		}
 		$where .= $this->cObj->enableFields('tx_naswowraidnloot_raid');
 		//t3lib_div::devLog('where', $this->extKey, 0, $where);
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_raid',$where);
+		$sort = 'start DESC';
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_raid',$where,'',$sort);
 		//t3lib_div::devLog('setMember', $this->extKey, 0, $GLOBALS['TYPO3_DB']->SELECTquery('*','tx_naswowraidnloot_raid',$where));
 		if ($res) {
 			$content .= '<ul>';
@@ -278,6 +335,30 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 	
 	function getRaid($raidId){
 		$content = '';
+		$markerArray = array();
+		
+		$where = 'uid='.$raidId;
+		$where .= $this->cObj->enableFields('tx_naswowraidnloot_raid');
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_raid',$where);
+		if ($res){
+			$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+			$markerArray['###TITLE###'] = $row['title'];
+			$markerArray['###DESTINATION###'] = $this->getArmoryDestination($row['destinationid']);
+			setlocale(LC_ALL,'de_DE.utf8');
+			$markerArray['###START###'] = strftime("%A, %e. %b. %Y",$row['start']);
+			if ($row['end'] != 0){
+				$markerArray['###END###'] = strftime("%A, %e. %b. %Y",$row['end']);
+			} else {
+				$markerArray['###END###'] = '';	
+			}
+			$markerArray['###MEMBER_TITLE###'] = $this->pi_getLL('member');
+			$markerArray['###MEMBER###'] = $this->getMemberList($row['uid']);
+						
+			$markerArray['###LOOT###'] = $this->pi_getLL('loot');
+			
+			$content = $this->renderContent('###SHOW_RAID###',$markerArray);
+		}
+		
 		return $content;
 	}
 	
@@ -439,8 +520,40 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 			
 			// save Button
 			$markerArray['###SAVE_LOOT###'] = $this->pi_getLL('save_loot');
+			$markerArray['###SAVE_TYPE###'] = 'save_loot';
 			
 			$content = $this->renderContent('###EDIT_LOOT###',$markerArray);
+		}
+		
+		return $content;
+	}
+	function getRandomLootForm ($raidId) {
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_raid','uid='.$raidId);
+		if ($res){
+			$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+				
+			$markerArray = array();
+			$markerArray['###PI###'] = $this->prefixId;
+			$markerArray['###FORM_ACTION###'] = $this->pi_linkTP_keepPIvars_url();
+			
+			// Loot Info
+			// TODO: Loot-Info-Text in FlexForms bringen
+			$markerArray['###LOOT_INFO###'] = '';
+			// Item Input
+			$markerArray['###ITEM###'] = $this->pi_getLL('item'); 
+			$markerArray['###ITEM_INPUT###'] = '<input type="text" name="'.$this->prefixId.'[random_name]" name="'.$this->prefixId.'[random_id]></input>"';
+			// Member Select
+			$markerArray['###MEMBER###'] = $this->pi_getLL('member');
+			$markerArray['###MEMBER_SELECT###'] = $this->getMemberSelect($raidId,'single');
+			// Loot Type
+			$markerArray['###LOOTTYPE###'] = $this->pi_getLL('loottype');
+			$markerArray['###LOOTTYPE_SELECT###'] = $this->getLootTypeSelect();
+			
+			// save Button
+			$markerArray['###SAVE_LOOT###'] = $this->pi_getLL('save_loot');
+			$markerArray['###SAVE_TYPE###'] = 'save_random';
+			
+			$content = $this->renderContent('###EDIT_RANDOMLOOT###',$markerArray);
 		}
 		
 		return $content;
@@ -481,6 +594,12 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 					$temp_markerArray['###ITEM###'] = '<span class="error">'.$this->pi_getLL('armory_notFound').'</span>';
 				}
 				$temp_markerArray['###BOSS###'] = $item_info['drop']['name'];
+				if ($row['bossid'] > 0) {
+					$boss_info = array();
+					$boss_info = $this->getArmoryBoss($row['bossid']);
+					//t3lib_div::devLog('getArmoryBoss', $this->extKey, 0, $boss_info);
+					$temp_markerArray['###BOSS###'] = $boss_info['filter']['creatureName'];
+				}				
 				if ($temp_markerArray['###BOSS###'] == '') {
 					$temp_markerArray['###BOSS###'] = '<span class="error">'.$this->pi_getLL('armory_notFound').'</span>';
 				}
@@ -531,6 +650,84 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		}
 		
 		return $info;
+	}
+	
+	function getArmoryBoss($bossId){
+		$info = array();
+		
+		$useragent = "Mozilla/5.0 (Windows; U; Windows NT 5.0; de-DE; rv:1.6)Gecko/20040206 Firefox/1.0.1"; 
+		ini_set('user_agent',$useragent); 
+		header('Content-Type: text/html; charset=utf-8');
+		$header[] = "Accept-Language: de-de,de;q=0.5"; 
+	  	$URL = 'http://eu.wowarmory.com/search.xml?fl[source]=dungeon&fl[boss]='.$bossId.'&fl[difficulty]=all&searchType=items';
+	  	//t3lib_div::devLog('getArmoryItem URL', $this->extKey, 0, $URL);
+	  	# CURL initialisieren und XML-Datei laden
+		$curl = curl_init();
+ 		curl_setopt($curl, CURLOPT_URL, $URL);
+		curl_setopt($curl, CURLOPT_USERAGENT, $useragent);
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+ 		$load = curl_exec($curl);
+		curl_close($curl);
+		# eingelesenen String zu SimpleXMLElement umformen
+		$xml = new SimpleXMLElement($load);
+		//t3lib_div::devLog('getArmoryBoss load', $this->extKey, 0, $load);
+		
+		if ($xml->armorySearch->searchResults->items->children()){
+			$item = $xml->armorySearch->searchResults->items->item;
+			foreach ($item->attributes() as $a => $b){
+				$info['item'][$a] = (string)$b;
+			}
+			foreach ($item->filter as $filter){
+				foreach ($filter->attributes() as $a => $b){
+					$info['filter'][$a] = (string)$b;
+				}
+			}
+		}
+		
+		return $info;
+	}
+	
+	function getArmoryDestination($destinationId){
+		$content = '';
+		
+		$useragent = "Mozilla/5.0 (Windows; U; Windows NT 5.0; de-DE; rv:1.6)Gecko/20040206 Firefox/1.0.1"; 
+		ini_set('user_agent',$useragent); 
+		header('Content-Type: text/html; charset=utf-8');
+		$header[] = "Accept-Language: de-de,de;q=0.5"; 
+		# URL vorbereiten
+		$URL = 'http://eu.wowarmory.com/search.xml?fl[source]=dungeon&fl[dungeon]='.$destinationId.'&fl[difficulty]=all&searchType=items';
+		//t3lib_div::devLog('URL', $this->extKey, 0, $URL);
+ 		# CURL initialisieren und XML-Datei laden
+		$curl = curl_init();
+ 
+		curl_setopt($curl, CURLOPT_URL, $URL);
+		curl_setopt($curl, CURLOPT_USERAGENT, $useragent);
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+ 
+		$load = curl_exec($curl);
+		curl_close($curl);
+		
+		//t3lib_div::devLog('getBossSelect load', $this->extKey, 0, $load);
+		# eingelesenen String zu SimpleXMLElement umformen
+		$xml = new SimpleXMLElement($load);
+		
+		if ($xml->armorySearch->searchResults->items->children()){
+			$item = $xml->armorySearch->searchResults->items->item;
+			foreach ($item->attributes() as $a => $b){
+				$info['item'][$a] = (string)$b;
+			}
+			foreach ($item->filter as $filter){
+				foreach ($filter->attributes() as $a => $b){
+					$info['filter'][$a] = (string)$b;
+				}
+			}
+		}
+		//t3lib_div::devLog('info', $this->extKey, 0, $info);
+		$content = $info['filter']['areaName'];
+		
+		return $content;
 	}
 	
 	function getLootTypeSelect() {
@@ -591,6 +788,23 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		//t3lib_div::devLog('getBossSelect bossis', $this->extKey, 0, $bossis);
 		if ($select != ''){
 			$content .= '<select onchange="nas_wowraidnloot_setItems('.$destinationId.',this.value);" id="'.$this->prefixId.'[boss]" name="'.$this->prefixId.'[boss]">'.$select.'</select>';
+		}
+		
+		return $content;
+	}
+	
+	function getMemberList ($raidId){
+		$content = '';
+		
+		$res_mm = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_raid_member_mm','uid_local='.$raidId);
+		if ($res_mm){
+			while ($row_mm = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res_mm)){
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_chars','uid='.$row_mm['uid_foreign'].$this->cObj->enableFields('tx_naswowraidnloot_chars'));
+				if ($res){
+					$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+					$content .= $row['name'].'<br>';	
+				}
+			}
 		}
 		
 		return $content;
