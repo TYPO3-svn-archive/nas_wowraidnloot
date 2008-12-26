@@ -597,7 +597,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 				if ($row['bossid'] > 0) {
 					$boss_info = array();
 					$boss_info = $this->getArmoryBoss($row['bossid']);
-					//t3lib_div::devLog('getArmoryBoss', $this->extKey, 0, $boss_info);
+					t3lib_div::devLog('getArmoryBoss', $this->extKey, 0, $boss_info);
 					$temp_markerArray['###BOSS###'] = $boss_info['filter']['creatureName'];
 				}				
 				if ($temp_markerArray['###BOSS###'] == '') {
@@ -659,8 +659,8 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		ini_set('user_agent',$useragent); 
 		header('Content-Type: text/html; charset=utf-8');
 		$header[] = "Accept-Language: de-de,de;q=0.5"; 
-	  	$URL = 'http://eu.wowarmory.com/search.xml?fl[source]=dungeon&fl[boss]='.$bossId.'&fl[difficulty]=all&searchType=items';
-	  	//t3lib_div::devLog('getArmoryItem URL', $this->extKey, 0, $URL);
+	  	$URL = 'http://eu.wowarmory.com/search.xml?searchType=items&fl[source]=dungeon&fl[difficulty]=normal&fl[boss]='.$bossId;
+	  	t3lib_div::devLog('getArmoryBoss URL', $this->extKey, 0, $URL);
 	  	# CURL initialisieren und XML-Datei laden
 		$curl = curl_init();
  		curl_setopt($curl, CURLOPT_URL, $URL);
