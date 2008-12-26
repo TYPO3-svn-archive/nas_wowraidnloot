@@ -7,6 +7,18 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="noCharSelected">kein Charakter ausgewaehlt</label>
+			
+			<label index="raid_info"></label>
+			<label index="no_loot">Keinen Loot erhalten.</label>
+			<label index="armory_notFound">In Armory nicht gefunden.</label>
+			
+			<label index="loottype">Loot-Typ</label>
+			<label index="loottype_0">Main Equip</label>
+			<label index="loottype_1">Off Equip</label>
+			<label index="loottype_2">Entzaubern</label>
+			
+			<label index="boss">Boss</label>
+			<label index="item">Gegenstand</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="noCharSelected">kein Charakter ausgewaehlt</label>

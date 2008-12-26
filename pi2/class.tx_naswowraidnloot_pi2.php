@@ -597,7 +597,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 				if ($row['bossid'] > 0) {
 					$boss_info = array();
 					$boss_info = $this->getArmoryBoss($row['bossid']);
-					t3lib_div::devLog('getArmoryBoss', $this->extKey, 0, $boss_info);
+					//t3lib_div::devLog('getArmoryBoss', $this->extKey, 0, $boss_info);
 					$temp_markerArray['###BOSS###'] = $boss_info['filter']['creatureName'];
 				}				
 				if ($temp_markerArray['###BOSS###'] == '') {
