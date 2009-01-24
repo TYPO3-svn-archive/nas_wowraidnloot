@@ -50,21 +50,26 @@ class tx_naswowraidnloot_pi3 extends tslib_pibase {
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
 		
-	
-		$content='
-			<strong>This is a few paragraphs:</strong><br />
-			<p>This is line 1</p>
-			<p>This is line 2</p>
-	
-			<h3>This is a form:</h3>
-			<form action="'.$this->pi_getPageLink($GLOBALS['TSFE']->id).'" method="POST">
-				<input type="hidden" name="no_cache" value="1">
-				<input type="text" name="'.$this->prefixId.'[input_field]" value="'.htmlspecialchars($this->piVars['input_field']).'">
-				<input type="submit" name="'.$this->prefixId.'[submit_button]" value="'.htmlspecialchars($this->pi_getLL('submit_button_label')).'">
-			</form>
-			<br />
-			<p>You can click here to '.$this->pi_linkToPage('get to this page again',$GLOBALS['TSFE']->id).'</p>
-		';
+		$content='';
+		
+		$info = array();
+		
+		$useragent = "Mozilla/5.0 (Windows; U; Windows NT 5.0; de-DE; rv:1.6)Gecko/20040206 Firefox/1.0.1"; 
+		ini_set('user_agent',$useragent); 
+		header('Content-Type: text/html; charset=utf-8');
+		$header[] = "Accept-Language: de-de,de;q=0.5"; 
+	  	$URL = 'http://de.wowhead.com/?zone=3456&xml';
+	  	t3lib_div::devLog('URL', $this->extKey, 0, $URL);
+	  	# CURL initialisieren und XML-Datei laden
+		$curl = curl_init();
+ 		curl_setopt($curl, CURLOPT_URL, $URL);
+		curl_setopt($curl, CURLOPT_USERAGENT, $useragent);
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+ 		$load = curl_exec($curl);
+		curl_close($curl);
+		# eingelesenen String zu SimpleXMLElement umformen
+		t3lib_div::devLog('load', $this->extKey, 0, $load);
 	
 		return $this->pi_wrapInBaseClass($content);
 	}

@@ -478,4 +478,129 @@ $TCA["tx_naswowraidnloot_raid"] = array (
 		"1" => array("showitem" => "")
 	)
 );
+
+$TCA["tx_naswowraidnloot_dungeons"] = array (
+    "ctrl" => $TCA["tx_naswowraidnloot_dungeons"]["ctrl"],
+    "interface" => array (
+        "showRecordFieldList" => "hidden,name"
+    ),
+    "feInterface" => $TCA["tx_naswowraidnloot_dungeons"]["feInterface"],
+    "columns" => array (
+        'hidden' => array (        
+            'exclude' => 1,
+            'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+            'config'  => array (
+                'type'    => 'check',
+                'default' => '0'
+            )
+        ),
+        "name" => Array (        
+            "exclude" => 1,        
+            "label" => "LLL:EXT:nas_wowraidnloot/locallang_db.xml:tx_naswowraidnloot_dungeons.name",        
+            "config" => Array (
+                "type" => "input",    
+                "size" => "30",
+            )
+        ),
+    ),
+    "types" => array (
+        "0" => array("showitem" => "hidden;;1;;1-1-1, name")
+    ),
+    "palettes" => array (
+        "1" => array("showitem" => "")
+    )
+);
+
+
+
+$TCA["tx_naswowraidnloot_bosses"] = array (
+    "ctrl" => $TCA["tx_naswowraidnloot_bosses"]["ctrl"],
+    "interface" => array (
+        "showRecordFieldList" => "hidden,name,dungeonid"
+    ),
+    "feInterface" => $TCA["tx_naswowraidnloot_bosses"]["feInterface"],
+    "columns" => array (
+        'hidden' => array (        
+            'exclude' => 1,
+            'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+            'config'  => array (
+                'type'    => 'check',
+                'default' => '0'
+            )
+        ),
+        "name" => Array (        
+            "exclude" => 1,        
+            "label" => "LLL:EXT:nas_wowraidnloot/locallang_db.xml:tx_naswowraidnloot_bosses.name",        
+            "config" => Array (
+                "type" => "input",    
+                "size" => "30",
+            )
+        ),
+        "dungeonid" => Array (        
+            "exclude" => 1,        
+            "label" => "LLL:EXT:nas_wowraidnloot/locallang_db.xml:tx_naswowraidnloot_bosses.dungeonid",        
+            "config" => Array (
+                "type" => "group",    
+                "internal_type" => "db",    
+                "allowed" => "tx_naswowraidnloot_dungeons",    
+                "size" => 1,    
+                "minitems" => 0,
+                "maxitems" => 1,
+            )
+        ),
+    ),
+    "types" => array (
+        "0" => array("showitem" => "hidden;;1;;1-1-1, name, dungeonid")
+    ),
+    "palettes" => array (
+        "1" => array("showitem" => "")
+    )
+);
+
+
+
+$TCA["tx_naswowraidnloot_bossItems"] = array (
+    "ctrl" => $TCA["tx_naswowraidnloot_bossItems"]["ctrl"],
+    "interface" => array (
+        "showRecordFieldList" => "hidden,name,bossid"
+    ),
+    "feInterface" => $TCA["tx_naswowraidnloot_bossItems"]["feInterface"],
+    "columns" => array (
+        'hidden' => array (        
+            'exclude' => 1,
+            'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+            'config'  => array (
+                'type'    => 'check',
+                'default' => '0'
+            )
+        ),
+        "name" => Array (        
+            "exclude" => 1,        
+            "label" => "LLL:EXT:nas_wowraidnloot/locallang_db.xml:tx_naswowraidnloot_bossItems.name",        
+            "config" => Array (
+                "type" => "input",    
+                "size" => "30",
+            )
+        ),
+        "bossid" => Array (        
+            "exclude" => 1,        
+            "label" => "LLL:EXT:nas_wowraidnloot/locallang_db.xml:tx_naswowraidnloot_bossItems.bossid",        
+            "config" => Array (
+                "type" => "group",    
+                "internal_type" => "db",    
+                "allowed" => "tx_naswowraidnloot_bosses",    
+                "size" => 1,    
+                "minitems" => 0,
+                "maxitems" => 1,
+            )
+        ),
+    ),
+    "types" => array (
+        "0" => array("showitem" => "hidden;;1;;1-1-1, name, bossid")
+    ),
+    "palettes" => array (
+        "1" => array("showitem" => "")
+    )
+);
+
 ?>

@@ -100,6 +100,67 @@ $TCA["tx_naswowraidnloot_raid"] = array (
 	)
 );
 
+$TCA["tx_naswowraidnloot_dungeons"] = array (
+    "ctrl" => array (
+        'title'     => 'LLL:EXT:nas_wowraidnloot/locallang_db.xml:tx_naswowraidnloot_dungeons',        
+        'label'     => 'name',    
+        'tstamp'    => 'tstamp',
+        'crdate'    => 'crdate',
+        'cruser_id' => 'cruser_id',
+        'default_sortby' => "ORDER BY crdate",    
+        'delete' => 'deleted',    
+        'enablecolumns' => array (        
+            'disabled' => 'hidden',
+        ),
+        'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
+        'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_naswowraidnloot_dungeons.gif',
+    ),
+    "feInterface" => array (
+        "fe_admin_fieldList" => "hidden, name",
+    )
+);
+
+$TCA["tx_naswowraidnloot_bosses"] = array (
+    "ctrl" => array (
+        'title'     => 'LLL:EXT:nas_wowraidnloot/locallang_db.xml:tx_naswowraidnloot_bosses',        
+        'label'     => 'name',    
+        'tstamp'    => 'tstamp',
+        'crdate'    => 'crdate',
+        'cruser_id' => 'cruser_id',
+        'default_sortby' => "ORDER BY crdate",    
+        'delete' => 'deleted',    
+        'enablecolumns' => array (        
+            'disabled' => 'hidden',
+        ),
+        'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
+        'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_naswowraidnloot_bosses.gif',
+    ),
+    "feInterface" => array (
+        "fe_admin_fieldList" => "hidden, name, dungeonid",
+    )
+);
+
+$TCA["tx_naswowraidnloot_bossItems"] = array (
+    "ctrl" => array (
+        'title'     => 'LLL:EXT:nas_wowraidnloot/locallang_db.xml:tx_naswowraidnloot_bossItems',        
+        'label'     => 'name',    
+        'tstamp'    => 'tstamp',
+        'crdate'    => 'crdate',
+        'cruser_id' => 'cruser_id',
+        'default_sortby' => "ORDER BY crdate",    
+        'delete' => 'deleted',    
+        'enablecolumns' => array (        
+            'disabled' => 'hidden',
+        ),
+        'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
+        'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_naswowraidnloot_bossItems.gif',
+    ),
+    "feInterface" => array (
+        "fe_admin_fieldList" => "hidden, name, bossid",
+    )
+);
+
+
 
 t3lib_div::loadTCA('tt_content');
 $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY.'_pi1']='layout,select_key';
@@ -129,4 +190,8 @@ t3lib_div::loadTCA('tt_content');
 $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY.'_pi5']='layout,select_key';
 t3lib_extMgm::addPlugin(array('LLL:EXT:nas_wowraidnloot/locallang_db.xml:tt_content.list_type_pi5', $_EXTKEY.'_pi5'),'list_type');
 t3lib_extMgm::addStaticFile($_EXTKEY,"pi5/static/","Administration");
+
+if (TYPO3_MODE == 'BE')    {
+    t3lib_extMgm::addModule('tools','txnaswowraidnlootM1','bottom',t3lib_extMgm::extPath($_EXTKEY).'mod1/');
+}
 ?>

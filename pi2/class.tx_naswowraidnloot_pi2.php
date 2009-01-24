@@ -587,7 +587,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 					$temp_markerArray['###MEMBER###'] = '';	
 				}
 				//TODO: Abhängigkeit vom Server herstellen... FF für eu oder www-Armory
-				$item_info = $this->getArmoryItem($row['itemid']);
+				//$item_info = $this->getArmoryItem($row['itemid']);
 				//t3lib_div::devLog('getArmoryItem', $this->extKey, 0, $item_info);
 				$temp_markerArray['###ITEM###'] = '<a target="_blank" href="http://eu.wowarmory.com/item-info.xml?i='.$row['itemid'].'">'.$item_info['item']['name'].'</a>';
 				if ($temp_markerArray['###ITEM###'] == '') {
@@ -746,46 +746,17 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 	
 	function getBossSelect($destinationId){
 		$content = '';
+		$select = '';
 		
-		$useragent = "Mozilla/5.0 (Windows; U; Windows NT 5.0; de-DE; rv:1.6)Gecko/20040206 Firefox/1.0.1"; 
-		ini_set('user_agent',$useragent); 
-		header('Content-Type: text/html; charset=utf-8');
-		$header[] = "Accept-Language: de-de,de;q=0.5"; 
-		# URL vorbereiten
-		$URL = "http://eu.wowarmory.com/data/dungeonStrings.xml";
- 		# CURL initialisieren und XML-Datei laden
-		$curl = curl_init();
- 
-		curl_setopt($curl, CURLOPT_URL, $URL);
-		curl_setopt($curl, CURLOPT_USERAGENT, $useragent);
-		curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
- 
-		$load = curl_exec($curl);
-		curl_close($curl);
-		
-		//t3lib_div::devLog('getBossSelect load', $this->extKey, 0, $load);
-		# eingelesenen String zu SimpleXMLElement umformen
-		$xml = new SimpleXMLElement($load);
-		
-		# Namen und IDs der Dungeons ausgeben
-		$bossis = array();
-		foreach ($xml->dungeons->dungeon as $lair){
-			if ($lair['id'] == $destinationId){
-				foreach($lair->boss as $boss){
-					foreach($boss->attributes() as $a => $b) {
-						$bossis[(string)$boss['name']][$a] = (string)$b;
-					}
-				}
+		$select .= '<option value="0">---</option>';
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_bosses','dungeonid='.$destinationId.$this->cObj->enableFields('tx_naswowraidnloot_bosses'),'','name');
+		//t3lib_div::devLog('res', $this->extKey, 0, $GLOBALS['TYPO3_DB']->SELECTquery('*','tx_naswowraidnloot_dungeons','1=1'.$this->cObj->enableFields('tx_naswowraidnloot_dungeons'),'','name'));		
+		if ($res){
+			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
+				$select .= '<option value="'.$row['uid'].'" ';
+				$select .= '>'.$row['name'].'</option>';
 			}
 		}
-		ksort($bossis);
-		$select .= '<option value="0">---</option>';
-		foreach ($bossis as $name => $boss){
-			$select .= '<option value="'.$boss['id'].'" ';
-			$select .= '>'.$boss['name'].'</option>';
-		}
-		//t3lib_div::devLog('getBossSelect bossis', $this->extKey, 0, $bossis);
 		if ($select != ''){
 			$content .= '<select onchange="nas_wowraidnloot_setItems('.$destinationId.',this.value);" id="'.$this->prefixId.'[boss]" name="'.$this->prefixId.'[boss]">'.$select.'</select>';
 		}
@@ -880,55 +851,24 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 	
 	function getDestSelect($destId = 0) {
 		$content = '';
-		
-		$useragent = "Mozilla/5.0 (Windows; U; Windows NT 5.0; de-DE; rv:1.6)Gecko/20040206 Firefox/1.0.1"; 
-		ini_set('user_agent',$useragent); 
-		header('Content-Type: text/html; charset=utf-8');
-		$header[] = "Accept-Language: de-de,de;q=0.5"; 
-		# URL vorbereiten
-		$URL = "http://eu.wowarmory.com/data/dungeonStrings.xml";
- 		# CURL initialisieren und XML-Datei laden
-		$curl = curl_init();
- 
-		curl_setopt ($curl, CURLOPT_URL, $URL);
-		curl_setopt($curl, CURLOPT_USERAGENT, $useragent);
-		curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
- 
-		$load = curl_exec($curl);
-		curl_close($curl);
-		
-		# eingelesenen String zu SimpleXMLElement umformen
-		$xml = new SimpleXMLElement($load);
-		
-		//foreach($xml->attributes() as $a => $b) {
-		//   	$content .= $a.'="'.$b."\"<br>";
-		//}
-		
-		# Namen und IDs der Dungeons ausgeben
-		$dungeons = array();
-		foreach ($xml->dungeons->dungeon as $lair){
-			foreach($lair->attributes() as $a => $b) {
-				//$dungeons[intval($lair['id'])][$a] = (string)$b;
-				$dungeons[(string)$lair['name']][$a] = (string)$b;
-				//$markerArray['###'.strtoupper($a).'###'] = (string)$b;
-		    	//$content .= $a.'="'.$b."\"<br>";
-			}			
-		}
-		//t3lib_div::devLog('getDestSelect', $this->extKey, 0, $dungeons);
-		ksort($dungeons);
 		$select = '';
-		foreach ($dungeons as $id => $dungeon){
-			$select .= '<option value="'.$dungeon['id'].'" ';
-			if ($destId == $dungeon['id']){
-				$select .= 'selected';
+
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_dungeons','1=1'.$this->cObj->enableFields('tx_naswowraidnloot_dungeons'),'','name');
+		//t3lib_div::devLog('res', $this->extKey, 0, $GLOBALS['TYPO3_DB']->SELECTquery('*','tx_naswowraidnloot_dungeons','1=1'.$this->cObj->enableFields('tx_naswowraidnloot_dungeons'),'','name'));		
+		if ($res){
+			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
+				$select .= '<option value="'.$row['uid'].'" ';
+				if ($destId == $row['uid']){
+					$select .= 'selected';
+				}
+				$select .= '>'.$row['name'].'</option>';
 			}
-			$select .= '>'.$dungeon['name'].'</option>';
 		}
+		
 		if ($select != ''){
-				$content .= '<select id="'.$this->prefixId.'[dungeonId]" name="'.$this->prefixId.'[dungeonId]">'.$select.'</select>';
+			$content .= '<select id="'.$this->prefixId.'[dungeonId]" name="'.$this->prefixId.'[dungeonId]">'.$select.'</select>';
 		}
-		//t3lib_div::devLog('dungeons', $this->extKey, 0, $dungeons);
+		//t3lib_div::devLog('dungeons', $this->extKey, 0, $content);
 		
 		return $content;
 	}
@@ -1001,45 +941,19 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 	}
 	
 	function setItems($destinationId,$boss){
+		$objResponse = new tx_xajax_response();
 		//t3lib_div::devLog('setItems', $this->extKey, 0, $destinationId.'/'.$boss);
-	  	$objResponse = new tx_xajax_response();
 	  	$line = '';
+	  	$select = '';
 	  	
-	  	$useragent = "Mozilla/5.0 (Windows; U; Windows NT 5.0; de-DE; rv:1.6)Gecko/20040206 Firefox/1.0.1"; 
-		ini_set('user_agent',$useragent); 
-		header('Content-Type: text/html; charset=utf-8');
-		$header[] = "Accept-Language: de-de,de;q=0.5"; 
-	  	$URL = 'http://eu.wowarmory.com/search.xml?fl[source]=dungeon&fl';
-	  	$URL .= '[dungeon]='.$destinationId.'&fl';
-	  	$URL .= '[boss]='.$boss.'&fl[difficulty]=all&searchType=items'; 
-	  	# CURL initialisieren und XML-Datei laden
-		$curl = curl_init();
- 		curl_setopt($curl, CURLOPT_URL, $URL);
-		curl_setopt($curl, CURLOPT_USERAGENT, $useragent);
-		curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
- 		$load = curl_exec($curl);
-		curl_close($curl);
-		# eingelesenen String zu SimpleXMLElement umformen
-		$xml = new SimpleXMLElement($load);
-		
-		$items = array();
-		//TODO: Item-Rarity einstellbar machen.
-		foreach($xml->armorySearch->searchResults->items->item as $item){
-			if (intval($item['rarity'] > 2)){
-				foreach($item->attributes() as $a => $b) {
-					$items[(string)$item['name']][$a] = (string)$b;
-				}
+	  	$select .= '<option value="0">---</option>';
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_bossItems','bossid='.$boss.$this->cObj->enableFields('tx_naswowraidnloot_bossItems'),'','name');
+		if ($res){
+			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
+				$select .= '<option value="'.$row['uid'].'">'.$row['name'].'</option>';
 			}
 		}
-		ksort($items);
-		//t3lib_div::devLog('setItems', $this->extKey, 0, $items);
-		
-		$select .= '<option value="0">---</option>';
-		foreach ($items as $name => $item){
-			$select .= '<option value="'.$item['id'].'">'.$item['name'].'</option>';
-		}
-		
+	  	
 		$content = '<select id="'.$this->prefixId.'[items]" name="'.$this->prefixId.'[items]">'.$select.'</select>';
 				
 		$objResponse->addAssign("loot_item","innerHTML", $content);

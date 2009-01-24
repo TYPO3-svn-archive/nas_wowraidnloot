@@ -128,3 +128,60 @@ CREATE TABLE tx_naswowraidnloot_raid (
 	PRIMARY KEY (uid),
 	KEY parent (pid)
 );
+
+#
+# Table structure for table 'tx_naswowraidnloot_dungeons'
+#
+CREATE TABLE tx_naswowraidnloot_dungeons (
+    uid int(11) NOT NULL auto_increment,
+    pid int(11) DEFAULT '0' NOT NULL,
+    tstamp int(11) DEFAULT '0' NOT NULL,
+    crdate int(11) DEFAULT '0' NOT NULL,
+    cruser_id int(11) DEFAULT '0' NOT NULL,
+    deleted tinyint(4) DEFAULT '0' NOT NULL,
+    hidden tinyint(4) DEFAULT '0' NOT NULL,
+    name tinytext NOT NULL,
+    
+    PRIMARY KEY (uid),
+    KEY parent (pid)
+);
+
+
+
+#
+# Table structure for table 'tx_naswowraidnloot_bosses'
+#
+CREATE TABLE tx_naswowraidnloot_bosses (
+    uid int(11) NOT NULL auto_increment,
+    pid int(11) DEFAULT '0' NOT NULL,
+    tstamp int(11) DEFAULT '0' NOT NULL,
+    crdate int(11) DEFAULT '0' NOT NULL,
+    cruser_id int(11) DEFAULT '0' NOT NULL,
+    deleted tinyint(4) DEFAULT '0' NOT NULL,
+    hidden tinyint(4) DEFAULT '0' NOT NULL,
+    name tinytext NOT NULL,
+    dungeonid blob NOT NULL,
+    
+    PRIMARY KEY (uid),
+    KEY parent (pid)
+);
+
+
+
+#
+# Table structure for table 'tx_naswowraidnloot_bossItems'
+#
+CREATE TABLE tx_naswowraidnloot_bossItems (
+    uid int(11) NOT NULL auto_increment,
+    pid int(11) DEFAULT '0' NOT NULL,
+    tstamp int(11) DEFAULT '0' NOT NULL,
+    crdate int(11) DEFAULT '0' NOT NULL,
+    cruser_id int(11) DEFAULT '0' NOT NULL,
+    deleted tinyint(4) DEFAULT '0' NOT NULL,
+    hidden tinyint(4) DEFAULT '0' NOT NULL,
+    name tinytext NOT NULL,
+    bossid blob NOT NULL,
+    
+    PRIMARY KEY (uid),
+    KEY parent (pid)
+);

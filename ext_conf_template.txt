@@ -3,3 +3,18 @@ admin_group = 0
 
 # cat=basic/enable; type=int+; label=Raid Manager User Group
 manage_group = 0
+
+# cat=basic/enable; type=string; label=Pre-Set the Armory Link for Import
+import_link = http://eu.wowarmory.com/
+
+# cat=basic/enable; type=string; label=Pre-Set the Armory Language for Import:de-de,de for german
+import_lang = de-de,de
+
+# cat=basic/enable; type=int+; label=Import Pid Dungeons
+dungeons_pid = 0
+
+# cat=basic/enable; type=int+; label=Import Pid Bosses
+bosses_pid = 0
+
+# cat=basic/enable; type=int+; label=Import Pid Bossitems
+bossitems_pid = 0
