@@ -1,0 +1,41 @@
+<div class="raidnloot_import">
+	<p>###ARMORY_LINK_LABEL###: <input style="width: 300px" type="text" name="armory_link" value="###ARMORY_LINK###" /></p>
+	<br />
+	<br />
+	<p>
+		<table>
+			<tr>
+				<td colspan="3">
+					###IMPORT_RELEASE###
+					<select name="import_release">
+						<option value="0">Classic</option>
+						<option value="1">Burning Crusade</option>
+						<option value="2" selected>Wrath of the Lich King</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>###IMPORT_WHAT###</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td><input type="checkbox" name="import_dungeons" value="1" checked /></td>
+				<td>###IMPORT_DUNGEONS###</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td><input type="checkbox" name="import_bosses" value="1" checked /></td>
+				<td>###IMPORT_BOSSES###</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td><input type="checkbox" name="import_bossitems" value="1" checked /></td>
+				<td>###IMPORT_BOSSITEMS###</td>
+			</tr>
+		</table>
+	</p>
+	<br />
+	<input type="submit" name="import_stuff" value="###IMPORT_BUTTON###" />
+</div>

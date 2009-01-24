@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for module &quot;web_txnaswowraidnlootM1&quot;</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="title">RnL-Importer</label>
+			<label index="function_import1">Basisdaten importieren</label>
+			<label index="function2">Function #2</label>
+			<label index="function3">Function #3</label>
+			
+			<label index="armory_link_label">Basis-Link zum Importieren</label>
+			<label index="import_what">Folgendes importieren:</label>
+			<label index="import_release">Wählen sie den Typ:</label>
+			<label index="import_dungeons">Dungeons</label>
+			<label index="import_bosses">Bosse</label>
+			<label index="import_bossitems">Boss-Items</label>
+			<label index="import_button">importieren</label>
+			
+			<label index="imported_header">Import folgender Tabellen durchgeführt:</label>
+			<label index="imported_dungeons">Dungeons</label>
+			<label index="imported_bosses">Bosse</label>
+			<label index="imported_bossitems">Boss-Items</label>
+			
+			<label index="armory_error614">Armory-Fehler: Überlastung</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="title">RnL-Importer</label>
+			<label index="function_import1">Basisdaten importieren</label>
+			<label index="function2">Function #2</label>
+			<label index="function3">Function #3</label>
+			
+			<label index="armory_link_label">Basis-Link zum Importieren</label>
+			<label index="import_what">Folgendes importieren:</label>
+			<label index="import_release">Wählen sie den Typ:</label>
+			<label index="import_dungeons">Dungeons</label>
+			<label index="import_bosses">Bosse</label>
+			<label index="import_bossitems">Boss-Items</label>
+			<label index="import_button">importieren</label>
+			
+			<label index="imported_header">Import folgender Tabellen durchgeführt:</label>
+			<label index="imported_dungeons">Dungeons</label>
+			<label index="imported_bosses">Bosse</label>
+			<label index="imported_bossitems">Boss-Items</label>
+			
+			<label index="armory_error614">Armory-Fehler: Überlastung</label>
+		</languageKey>
+	</data>
+</T3locallang>
