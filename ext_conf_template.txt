@@ -18,3 +18,6 @@ bosses_pid = 0
 
 # cat=basic/enable; type=int+; label=Import Pid Bossitems
 bossitems_pid = 0
+
+# cat=basic/enable; type=string; label=Pre-Set Link to show Item-Informations:Armory:http://eu.wowarmory.com/item-info.xml?i=
+item_link = http://de.wowhead.com/?item=

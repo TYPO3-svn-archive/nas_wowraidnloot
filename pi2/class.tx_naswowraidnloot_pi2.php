@@ -58,7 +58,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		$this->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['nas_wowraidnloot']);
 
 		$content = '';
-		//t3lib_div::devLog('piVars', $this->extKey, 0, $this->piVars);
+		t3lib_div::devLog('piVars', $this->extKey, 0, $this->piVars);
 		//t3lib_div::devLog('extConf', $this->extKey, 0, $this->extConf);
 		
 		//make the date2cal instance
@@ -106,10 +106,13 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 					break;
 				case 'RAID-NEW': if ($this->piVars['save_new_raid']){
 									$raidId = $this->saveRaid('new',$userId);
-									$content .= $this->getEditForm($userId,$raidId);
-									$content .= $this->getEditLootForm($raidId);
-									$content .= $this->getRandomLootForm($raidId);
-									$content .= $this->getShowLoot($raidId);
+									$redirect_url = 'index.php?id='.$this->editPid.'&tx_naswowraidnloot_pi2[raid_id]='.$raidId;
+									header('Location: '.t3lib_div::locationHeaderUrl($redirect_url));
+                            		exit;
+									//$content .= $this->getEditForm($userId,$raidId);
+									//$content .= $this->getEditLootForm($raidId);
+									//$content .= $this->getRandomLootForm($raidId);
+									//$content .= $this->getShowLoot($raidId);
 								} else {
 									$content .= $this->getNewForm($userId);
 								}
@@ -611,7 +614,8 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 					$item_info = $this->getArmoryItem($row['itemid']);
 				}
 				//t3lib_div::devLog('getArmoryItem', $this->extKey, 0, $item_info);
-				$temp_markerArray['###ITEM###'] = '<a target="_blank" href="http://eu.wowarmory.com/item-info.xml?i='.$row['itemid'].'">'.$item_info['name'].'</a>';
+				//$temp_markerArray['###ITEM###'] = '<a target="_blank" href="http://eu.wowarmory.com/item-info.xml?i='.$row['itemid'].'">'.$item_info['name'].'</a>';
+				$temp_markerArray['###ITEM###'] = '<a target="_blank" href="'.$this->extConf['item_link'].$row['itemid'].'">'.$item_info['name'].'</a>';
 				if ($temp_markerArray['###ITEM###'] == '') {
 					$temp_markerArray['###ITEM###'] = '<span class="error">'.$this->pi_getLL('armory_notFound').'</span>';
 				}

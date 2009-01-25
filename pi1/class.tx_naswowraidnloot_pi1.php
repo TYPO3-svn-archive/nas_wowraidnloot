@@ -50,6 +50,7 @@ class tx_naswowraidnloot_pi1 extends tslib_pibase {
 		$this->pi_setPiVarDefaults();
 		$this->pi_initPIflexForm();
 		$this->pi_loadLL();
+		$this->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['nas_wowraidnloot']);
 		
 		$template_file = t3lib_extMgm::siteRelPath('nas_wowraidnloot')."/res/main.html"; 
 		$this->tmpl = $this->cObj->fileResource($template_file);
@@ -200,13 +201,14 @@ class tx_naswowraidnloot_pi1 extends tslib_pibase {
 							$lines_top = $this->renderContent('###SHOW_LOOT_LINE_CHAR_TOP###',$temp_markerArray);
 							while ($row_loot = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res_loot)){
 								$temp_markerArray = array();
-								$item_info = $this->getItem($row['itemid']);
+								$item_info = $this->getItem($row_loot['itemid']);
 								//t3lib_div::devLog('item_info', $this->extKey, 0, $item_info);
 								if ($item_info == false){
-									$item_info = $this->getArmoryItem($row['itemid']);
+									$item_info = $this->getArmoryItem($row_loot['itemid']);
 								}
 								//t3lib_div::devLog('getArmoryItem', $this->extKey, 0, $item_info);
-								$temp_markerArray['###ITEM###'] = '<a target="_blank" href="http://eu.wowarmory.com/item-info.xml?i='.$row['itemid'].'">'.$item_info['name'].'</a>';
+								//$temp_markerArray['###ITEM###'] = '<a target="_blank" href="http://eu.wowarmory.com/item-info.xml?i='.$row['itemid'].'">'.$item_info['name'].'</a>';
+								$temp_markerArray['###ITEM###'] = '<a target="_blank" href="'.$this->extConf['item_link'].$row_loot['itemid'].'">'.$item_info['name'].'</a>';
 								if ($temp_markerArray['###ITEM###'] == '') {
 									$temp_markerArray['###ITEM###'] = '<span class="error">'.$this->pi_getLL('armory_notFound').'</span>';
 								}
