@@ -582,6 +582,13 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		$markerArray = array();
 		$userId = $GLOBALS['TSFE']->fe_user->user['uid'];
 		
+		$res_raid = $GLOBALS['TYPO3_DB']->exec_SELECTquery('leader','tx_naswowraidnloot_raid','uid='.$raidId);
+		if ($res_raid){
+			$row_raid = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res_raid);
+			t3lib_div::devLog('row_raid', $this->extKey, 0, $row_raid);
+			$leader = explode(',',$row_raid['leader']);
+		}
+		
 		$where = 'raidid='.$raidId;
 		if ($charId > 0){
 			$where .= 'AND charid='.$charId;
@@ -630,8 +637,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 					$temp_markerArray['###BOSS###'] = '<span class="error">'.$this->pi_getLL('armory_notFound').'</span>';
 				}
 				$temp_markerArray['###LOOTTYPE###'] = $this->pi_getLL('loottype_'.$row['loottype']);
-				$leaders = explode(',',$row['leader']);
-				if (in_array($userId,$leaders)){
+				if (in_array($userId,$leader)){
 					$temp_markerArray['###ACTION###'] = '<a href="" onClick="nas_wowraidnloot_delCollected('.$row['uid'].');return false;"><img src="typo3/sysext/t3skin/icons/gfx/garbage.gif" /></a>';
 				} else {
 					$temp_markerArray['###ACTION###'] = '';
