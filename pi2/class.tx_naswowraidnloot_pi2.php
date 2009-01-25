@@ -343,7 +343,8 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		if ($res){
 			$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 			$markerArray['###TITLE###'] = $row['title'];
-			$markerArray['###DESTINATION###'] = $this->getArmoryDestination($row['destinationid']);
+			$dest_info = $this->getDestination($row['destinationid']);
+			$markerArray['###DESTINATION###'] = $dest_info['name'];
 			setlocale(LC_ALL,'de_DE.utf8');
 			$markerArray['###START###'] = strftime("%A, %e. %b. %Y",$row['start']);
 			if ($row['end'] != 0){
@@ -587,19 +588,22 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 					$temp_markerArray['###MEMBER###'] = '';	
 				}
 				//TODO: Abhängigkeit vom Server herstellen... FF für eu oder www-Armory
-				//$item_info = $this->getArmoryItem($row['itemid']);
+				$item_info = $this->getItem($row['itemid']);
+				//t3lib_div::devLog('item_info', $this->extKey, 0, $item_info);
+				if ($item_info == false){
+					$item_info = $this->getArmoryItem($row['itemid']);
+				}
 				//t3lib_div::devLog('getArmoryItem', $this->extKey, 0, $item_info);
-				$temp_markerArray['###ITEM###'] = '<a target="_blank" href="http://eu.wowarmory.com/item-info.xml?i='.$row['itemid'].'">'.$item_info['item']['name'].'</a>';
+				$temp_markerArray['###ITEM###'] = '<a target="_blank" href="http://eu.wowarmory.com/item-info.xml?i='.$row['itemid'].'">'.$item_info['name'].'</a>';
 				if ($temp_markerArray['###ITEM###'] == '') {
 					$temp_markerArray['###ITEM###'] = '<span class="error">'.$this->pi_getLL('armory_notFound').'</span>';
 				}
-				$temp_markerArray['###BOSS###'] = $item_info['drop']['name'];
-				if ($row['bossid'] > 0) {
-					$boss_info = array();
-					$boss_info = $this->getArmoryBoss($row['bossid']);
-					//t3lib_div::devLog('getArmoryBoss', $this->extKey, 0, $boss_info);
-					$temp_markerArray['###BOSS###'] = $boss_info['filter']['creatureName'];
-				}				
+				//$temp_markerArray['###BOSS###'] = $item_info['drop']['name'];
+				$boss_info = array();
+				$boss_info = $this->getBoss($item_info['bossid']);
+				//t3lib_div::devLog('boss_info', $this->extKey, 0, $boss_info);
+				$temp_markerArray['###BOSS###'] = $boss_info['name'];
+				
 				if ($temp_markerArray['###BOSS###'] == '') {
 					$temp_markerArray['###BOSS###'] = '<span class="error">'.$this->pi_getLL('armory_notFound').'</span>';
 				}
@@ -613,6 +617,19 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		$content = $this->renderContent('###SHOW_LOOT###',$markerArray);
 		
 		return $content;
+	}
+	
+	function getItem($itemId){
+		$item = array();
+		
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_bossItems','uid='.$itemId);
+		if ($res){
+			$item = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		} else {
+			$item = false;
+		}
+
+		return $item;
 	}
 	
 	function getArmoryItem($itemId){
@@ -648,8 +665,20 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 				}
 			}
 		}
-		
 		return $info;
+	}
+	
+	function getBoss($bossId){
+		$boss = array();
+		
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_bosses','uid='.$bossId);
+		if ($res){
+			$boss = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		} else {
+			$boss = false;
+		}
+
+		return $boss;
 	}
 	
 	function getArmoryBoss($bossId){
@@ -686,6 +715,19 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		}
 		
 		return $info;
+	}
+	
+	function getDestination($destId){
+		$dest = array();
+		
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_dungeons','uid='.$destId);
+		if ($res){
+			$dest = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		} else {
+			$dest = false;
+		}
+
+		return $dest;
 	}
 	
 	function getArmoryDestination($destinationId){
