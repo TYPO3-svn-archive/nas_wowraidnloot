@@ -580,6 +580,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 	
 	function getShowLoot($raidId, $charId = 0, $type = 'raid'){
 		$markerArray = array();
+		$userId = $GLOBALS['TSFE']->fe_user->user['uid'];
 		
 		$where = 'raidid='.$raidId;
 		if ($charId > 0){
@@ -629,7 +630,12 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 					$temp_markerArray['###BOSS###'] = '<span class="error">'.$this->pi_getLL('armory_notFound').'</span>';
 				}
 				$temp_markerArray['###LOOTTYPE###'] = $this->pi_getLL('loottype_'.$row['loottype']);
-				$temp_markerArray['###ACTION###'] = '<a href="" onClick="nas_wowraidnloot_delCollected('.$row['uid'].');return false;"><img src="typo3/sysext/t3skin/icons/gfx/garbage.gif" /></a>';
+				$leaders = explode(',',$row['leader']);
+				if (in_array($userId,$leaders)){
+					$temp_markerArray['###ACTION###'] = '<a href="" onClick="nas_wowraidnloot_delCollected('.$row['uid'].');return false;"><img src="typo3/sysext/t3skin/icons/gfx/garbage.gif" /></a>';
+				} else {
+					$temp_markerArray['###ACTION###'] = '';
+				}
 				if ($type == 'raid'){
 					$lines .= $this->renderContent('###SHOW_LOOT_LINE_RAID###',$temp_markerArray);
 				}
