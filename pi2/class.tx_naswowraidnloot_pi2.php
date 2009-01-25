@@ -1040,7 +1040,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 	function delCollected($collId){
 		$objResponse = new tx_xajax_response();
 		
-		$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_naswowraidnloot_collected','uid='.$collId);
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_naswowraidnloot_collected','uid='.$collId,array('deleted'=>1));
 		
 		$objResponse->addAssign("col_".$collId,"innerHTML", '');
 		
@@ -1050,8 +1050,8 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 	function delRaid($raidId){
 		$objResponse = new tx_xajax_response();
 		
-		$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_naswowraidnloot_raid','uid='.$raidId);
-		$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_naswowraidnloot_raid_member_mm','uid_local='.$raidId);
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_naswowraidnloot_raid','uid='.$raidId,array('deleted'=>1));
+		//$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_naswowraidnloot_raid_member_mm','uid_local='.$raidId);
 		
 		$objResponse->addAssign("raid_".$raidId,"innerHTML", '');
 		$objResponse->addAssign("raidL_".$raidId,"innerHTML", '');
