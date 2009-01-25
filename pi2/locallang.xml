@@ -36,6 +36,8 @@
 			<label index="loottype_1">Off Equip</label>
 			<label index="loottype_2">Entzaubern</label>
 			
+			<label index="action">+</label>
+			
 			<label index="save">Raid speichern</label>
 			<label index="save_loot">zuweisen</label>
 			

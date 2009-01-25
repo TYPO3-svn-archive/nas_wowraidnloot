@@ -310,8 +310,22 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 					if ($this->editPid > 0 and $userId > 0){
 						$leaders = explode(',',$row['leader']);
 						if (in_array($userId,$leaders)){
+							if ($type == 'member'){
+								$content .= '<div id="raidLM_'.$row['uid'].'">';
+							} else {
+								$content .= '<div id="raidL_'.$row['uid'].'">';
+							}
+							$content .= '<span class="del_raid"><a href="" onClick="nas_wowraidnloot_delRaid('.$row['uid'].');return false;"><img src="typo3/sysext/t3skin/icons/gfx/garbage.gif" /></a></span>';
 							$content .= '<span class="edit_link">'.$this->pi_linkToPage($this->pi_getLL('editRaid'),$this->editPid,'',array($this->prefixId.'[raid_id]'=>$row['uid'])).'</span>';
+						} else {
+							if ($type == 'member'){
+								$content .= '<div id="raidM_'.$row['uid'].'">';
+							} else {
+								$content .= '<div id="raid_'.$row['uid'].'">';
+							}
 						}
+					} else {
+						$content .= '<div id="raid_'.$row['uid'].'">';	
 					}
 					setlocale(LC_ALL,'de_DE.utf8');
 					$title_line = $row['title'].' ('.strftime("%A, %e. %b. %Y",$row['start']).')';
@@ -320,7 +334,8 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 					} else {
 						$content .= $this->pi_linkTP($title_line,array($this->prefixId.'[raid_id]'=>$row['uid']));
 					}
-					$content .= '</li>';
+					$content .= '</div>';
+					$content .= '</li>';					
 				}
 			}
 		}
@@ -577,9 +592,11 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 			$temp_markerArray['###ITEM###'] = $this->pi_getLL('item');
 			$temp_markerArray['###BOSS###'] = $this->pi_getLL('boss');
 			$temp_markerArray['###LOOTTYPE###'] = $this->pi_getLL('loottype');
+			$temp_markerArray['###ACTION###'] = $this->pi_getLL('action');
 			$lines .= $this->renderContent('###SHOW_LOOT_LINE_RAID_TOP###',$temp_markerArray);
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
 				$temp_markerArray = array();
+				$temp_markerArray['###COLID###'] = $row['uid'];
 				$res_member = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_naswowraidnloot_chars','uid='.$row['charid']);
 				if ($res_member) {
 					$row_member = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res_member);
@@ -608,6 +625,7 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 					$temp_markerArray['###BOSS###'] = '<span class="error">'.$this->pi_getLL('armory_notFound').'</span>';
 				}
 				$temp_markerArray['###LOOTTYPE###'] = $this->pi_getLL('loottype_'.$row['loottype']);
+				$temp_markerArray['###ACTION###'] = '<a href="" onClick="nas_wowraidnloot_delCollected('.$row['uid'].');return false;"><img src="typo3/sysext/t3skin/icons/gfx/garbage.gif" /></a>';
 				if ($type == 'raid'){
 					$lines .= $this->renderContent('###SHOW_LOOT_LINE_RAID###',$temp_markerArray);
 				}
@@ -1003,6 +1021,30 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 	  	return $objResponse->getXML();	
 	}
 	
+	function delCollected($collId){
+		$objResponse = new tx_xajax_response();
+		
+		$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_naswowraidnloot_collected','uid='.$collId);
+		
+		$objResponse->addAssign("col_".$collId,"innerHTML", '');
+		
+	  	return $objResponse->getXML();
+	}
+	
+	function delRaid($raidId){
+		$objResponse = new tx_xajax_response();
+		
+		$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_naswowraidnloot_raid','uid='.$raidId);
+		$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_naswowraidnloot_raid_member_mm','uid_local='.$raidId);
+		
+		$objResponse->addAssign("raid_".$raidId,"innerHTML", '');
+		$objResponse->addAssign("raidL_".$raidId,"innerHTML", '');
+		$objResponse->addAssign("raidLM_".$raidId,"innerHTML", '');
+		$objResponse->addAssign("raidM_".$raidId,"innerHTML", '');
+		
+	  	return $objResponse->getXML();
+	}
+	
 	/***********************************************/
 	
 	function renderContent($subpart, $markerArray) {
@@ -1037,6 +1079,8 @@ class tx_naswowraidnloot_pi2 extends tslib_pibase {
 		$this->xajax->registerFunction(array('setMember', &$this, 'setMember'));
 		$this->xajax->registerFunction(array('unSetMember', &$this, 'unSetMember'));
 		$this->xajax->registerFunction(array('setItems', &$this, 'setItems'));
+		$this->xajax->registerFunction(array('delCollected', &$this, 'delCollected'));
+		$this->xajax->registerFunction(array('delRaid', &$this, 'delRaid'));
 
 		// If this is an xajax request call our registered function, send output and exit
 		$this->xajax->processRequest();
